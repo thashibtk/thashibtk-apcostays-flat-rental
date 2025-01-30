@@ -3,6 +3,10 @@ body{
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
+.container-fluid {
+    width: 1200px;
+}
+
 .navbar{
     margin-top: 15px;
 }
@@ -87,6 +91,7 @@ body{
 }
 
 
+
 /* #footer */
 .horiline{
     width: 100%;
@@ -96,6 +101,16 @@ body{
     margin-bottom: 80px;
   }
 
+@media (max-width: 768px) {
+    .horiline {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .footer-logo{
+        width: 75px;
+
+    }
+}
 
 
 .upfooter {
@@ -141,12 +156,13 @@ body{
     }
     .col-right {
         margin: 100px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
     .col-right .social-media {
         justify-content: center;
     }
 }
-
 
 .followus{
     margin-left: 75px;
@@ -157,6 +173,7 @@ body{
         margin-left: 0;
     }
 }
+
 
 .text-muted{
     text-align: end;
@@ -175,7 +192,17 @@ body{
         height: 130px;
     }
     .col-left h4 {
-        font-size: 30px;
+        font-size: 20px !important;
+    }
+    .col-left img {
+        width: 50px;
+        height: auto;
+    }
+    .col-right {
+        font-size: 10px;
+    }
+    .footlink{
+        font-size: 10px;
     }
 }
 
@@ -188,6 +215,14 @@ body{
     margin-bottom: 40px;
   }
 
+@media (max-width: 768px) {
+    .horiline2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
 .downfooter{
     margin-bottom: 30px;
 }
+

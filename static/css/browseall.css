@@ -1,3 +1,9 @@
+.browse{
+    margin-bottom: 30px;
+    font-size: 35px;
+    font-weight: 600;
+}
+
 .flat {
     position: relative;
     width: 300px;

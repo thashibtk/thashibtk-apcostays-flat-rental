@@ -19,6 +19,9 @@ def listrental(request):
 def showdetails(request):
     return render(request, 'showflat.html')
 
+def viewprofile(request):
+    return render(request, 'viewprofile.html')
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')

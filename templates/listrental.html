@@ -7,103 +7,83 @@
 {% endblock %}
 
 {% block content %}
-    
-<div class="container mt-5">
-    <h2 class="text-center mb-2">Advertise Your Rental</h2>
-    <h5 class="text-center mb-4">Let the world discover your property</h5>
-    <form>
-        <!-- Property Details -->
-        <div class="card mb-4">
-            <div class="card-header text-white">
-                <h5>Property Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="propertyTitle" class="form-label">Property Title</label>
-                    <input type="text" class="form-control" id="propertyTitle" placeholder="e.g., Cozy 2BHK Apartment">
-                </div>
-                <div class="mb-3">
-                    <label for="propertyType" class="form-label">Property Type</label>
-                    <select class="form-select" id="propertyType">
-                        <option value="" selected disabled>Choose a type</option>
-                        <option>Apartment</option>
-                        <option>House</option>
-                        <option>Villa</option>
-                        <option>Shared Room</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <input type="text" class="form-control" id="location" placeholder="e.g., Kozhikode">
-                </div>
-            </div>
-        </div>
 
-        <!-- Rental Information -->
-        <div class="card mb-4">
-            <div class="card-header text-white">
-                <h5>Rental Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+<div class="logsincontainer mt-5">  
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title">Advertise Your Rental</div>
+        </div>
+        <div class="form-container">
+            <div class="form-inner">
+                <form>
+                    <!-- Property Details -->
+                    <div class="field">
+                        <label for="propertyTitle" class="form-label">Property Title</label>
+                        <input type="text" id="propertyTitle" placeholder="e.g., Galaxy Neon" required>
+                    </div>
+                    <div class="field">
+                        <label for="propertyType" class="form-label">Property Type</label>
+                        <select id="propertyType" class="form-select" required>
+                            <option value="" selected disabled>Choose a type</option>
+                            <option>Apartment</option>
+                            <option>House</option>
+                            <option>Villa</option>
+                            <option>Shared Room</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="rooms" class="form-label">Rooms</label>
+                        <input type="number" id="rooms" placeholder="e.g., 2" min="1" required>
+                    </div>
+                    <div class="field">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" id="location" placeholder="e.g., Kozhikode" required>
+                    </div>
+
+                    <!-- Rental Information -->
+                    <div class="field">
                         <label for="monthlyRent" class="form-label">Monthly Rent (₹)</label>
-                        <input type="number" class="form-control" id="monthlyRent" placeholder="e.g., 15,000">
+                        <input type="number" id="monthlyRent" placeholder="e.g., 15,000" required>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="field">
                         <label for="deposit" class="form-label">Security Deposit (₹)</label>
-                        <input type="number" class="form-control" id="deposit" placeholder="e.g., 30,000">
+                        <input type="number" id="deposit" placeholder="e.g., 30,000" required>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Property Description</label>
-                    <textarea class="form-control" id="description" rows="4" placeholder="Write a brief description of your property..."></textarea>
-                </div>
-            </div>
-        </div>
+                    <div class="field">
+                        <label for="description" class="form-label">Property Description</label>
+                        <textarea id="description" rows="10" placeholder="Write a brief description of your property...(optional)"></textarea>
+                    </div>
 
-        <!-- Image Upload -->
-        <div class="card mb-4">
-            <div class="card-header text-white">
-                <h5>Property Images</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="propertyImages" class="form-label">Upload Images</label>
-                    <input class="form-control" type="file" id="propertyImages" multiple accept="image/*">
-                    <small class="text-muted">You can upload images of your property.</small>
-                </div>
-            </div>
-        </div>
+                    <!-- Image Upload -->
+                    <div class="field">
+                        <label for="propertyImages" class="form-label">Upload Images</label>
+                        <input type="file" class="flatimgupload" id="propertyImages" multiple accept="image/*" required>
+                        <small class="text-muted">You can upload images of your property.</small>
+                    </div>
 
-        <!-- Contact Details -->
-        <div class="card mb-4">
-            <div class="card-header text-white">
-                <h5>Contact Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="ownerName" class="form-label">Your Name</label>
-                    <input type="text" class="form-control" id="ownerName" placeholder="e.g., Richard Lucas">
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <!-- Contact Details -->
+                    <div class="field">
+                        <label for="ownerName" class="form-label">Your Name</label>
+                        <input type="text" id="ownerName" placeholder="e.g., Richard Lucas" >
+                    </div>
+                    <div class="field">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" placeholder="e.g., example@email.com">
+                        <input type="email" id="email" placeholder="e.g., example@email.com">
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="field">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="e.g., +91 9876543210">
+                        <input type="tel" id="phone" placeholder="e.g., +91 9876543210" required>
                     </div>
-                </div>
+
+                    <!-- Submit Button -->
+                    <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Submit" >
+                    </div>
+                    <div class="signup-link">Need to update your details? <a href="{% url 'signup' %}">Edit now</a></div>
+                </form>
             </div>
         </div>
-
-        <!-- Submit Button -->
-        <div class="text-center">
-            <button type="submit" class="btn submit px-5">Submit</button>
-        </div>
-    </form>
+    </div>
 </div>
-
 {% endblock %}

@@ -20,6 +20,7 @@ class RegisterDb(models.Model):
     Email = models.EmailField(max_length=100, null=True, blank=True)
     Password = models.CharField(max_length=100, null=True, blank=True)
     ConfirmPassword = models.CharField(max_length=100, null=True, blank=True)
+    Place = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.Email

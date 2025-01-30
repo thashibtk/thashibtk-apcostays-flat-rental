@@ -19,7 +19,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <!-- Brand Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
                     <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-2" style="height: 30px;"> Apcostays
                 </a>
         
@@ -86,8 +86,8 @@
         <footer>
           <div class="upfooter">
               <!-- Left Column: Logo and Company Name -->
-              <div class="col-left">
-                  <img src="{% static 'images/logo.png' %}" alt="Logo" width="130px" height="171px" class="me-2">
+              <div class="col-left text-center text-md-start">
+                  <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-2 footer-logo img-fluid">
                   <h4 class="fw-bold mb-0" style="font-size: 40px;">ApcoStays</h4>
               </div>
               <!-- Right Column: Contact Information and Social Media Icons -->
@@ -117,15 +117,15 @@
           <div class="downfooter d-flex flex-column flex-md-row justify-content-between align-items-center">
               <div class="col-12 col-md-6 mb-3 mb-md-0">
               <ul class="list-inline mb-2 text-center text-md-start">
-                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Home</a></li>
-                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Browse All</a></li>
-                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">List Your Rental</a></li>
-                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
-                <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none">Disclaimer</a></li>
+                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none footlink">Home</a></li>
+                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none footlink">Browse All</a></li>
+                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none footlink">List Your Rental</a></li>
+                <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none footlink">Privacy Policy</a></li>
+                <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none footlink">Disclaimer</a></li>
               </ul>
                 </div>
                 <div class="col-12 col-md-6 text-center text-md-end">
-              <p class="text-muted mb-0 text-center text-md-end">Copyright &copy; 2025 &bull; ApcoStays Ltd.</p>
+              <p class="text-muted mb-0 text-center text-md-end footlink">Copyright &copy; 2025 &bull; ApcoStays Ltd.</p>
           </div>
           </div>
         </footer>

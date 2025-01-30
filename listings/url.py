@@ -10,4 +10,5 @@ urlpatterns = [
     path('browseall/', views.browseall, name='browseall'),
     path('listrental/', views.listrental, name='listrental'),
     path('showdetails/', views.showdetails, name='showdetails'),
+    path('profile/', views.viewprofile, name='profile'),
 ]
