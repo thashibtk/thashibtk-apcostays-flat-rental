@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Apcostays{% endblock %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="logsincontainer">
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title login">Login Form</div>
+        </div>
+        <div class="form-container">
+            {% if message %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            <div class="form-inner">
+                <form action="{% url 'login' %}" method="post" class="login">
+                    {% csrf_token %}
+                    <div class="field">
+                        <input type="text" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="pass-link"><a href="#">Forgot password?</a></div>
+                    <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Login">
+                    </div>
+                    <div class="signup-link">Not a member? <a href="{% url 'signup' %}">Signup now</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

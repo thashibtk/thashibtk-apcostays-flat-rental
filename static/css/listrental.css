@@ -1,0 +1,20 @@
+.card-header {
+    background-color: #0a35f49b;
+}
+
+.submit{
+    border: 2px solid #0a35f49b;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.submit:hover{
+    background-color: #0a35f49b;
+    color: white;
+}
+
+.card-body{
+    backdrop-filter: blur(10px);
+}

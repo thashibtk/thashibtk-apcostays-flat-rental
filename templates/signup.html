@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SignUp - Apcostays{% endblock %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="logsincontainer">
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title signup">Signup Form</div>
+        </div>
+        <div class="form-container">
+            <div class="form-inner">
+                <form action="{% url 'signup' %}" method="post" class="signup">
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    <div class="field">
+                        <input type="text" name="name" placeholder="Full Name" required>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password1" placeholder="Password" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password2" placeholder="Confirm password" required>
+                    </div>
+                    <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Signup">
+                    </div>
+                    <div class="signup-link">Already a member? <a href="{% url 'login' %}">Login now</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

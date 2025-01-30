@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apcostays - Browse All</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/listrental.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+
+
+</head>
+<body>
+    <div class="container">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-2" style="height: 30px;"> Apcostays
+            </a>
+    
+            <!-- Toggle Button for Small Screens -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+    
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse justify-content-center text-center" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'browseall' %}">Browse All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listrental' %}">List Your Rental</a>
+                    </li>
+                </ul>
+    
+                <!-- Login Button -->
+                <a href="{% url 'login' %}" class="login-button d-inline-block mt-3 mt-lg-0 log" data-bs-toggle="modal" data-bs-target="#signupModal">
+                    Login 
+                    <svg width="24" height="24" class="ms-2" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 4.08331C12.1049 4.08331 4.08337 12.1049 4.08337 22C4.08337 31.8951 12.1049 39.9166 22 39.9166C31.8951 39.9166 39.9167 31.8951 39.9167 22C39.9167 12.1049 31.8951 4.08331 22 4.08331Z" stroke="#0A35F4" stroke-width="2.6875" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.15222 33.3694C8.15222 33.3694 12.1459 28.2708 22.0001 28.2708C31.8542 28.2708 35.8479 33.3694 35.8479 33.3694" stroke="#0A35F4" stroke-width="2.6875" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 22C24.9685 22 27.375 19.5935 27.375 16.625C27.375 13.6565 24.9685 11.25 22 11.25C19.0315 11.25 16.625 13.6565 16.625 16.625C16.625 19.5935 19.0315 22 22 22Z" stroke="#0A35F4" stroke-width="2.6875" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+
+<div class="container my-5">
+    <!-- Property Details Section -->
+    <div class="card mb-4">
+        <div class="card-header text-white" style="background-color: #0A35F4;">
+            <h5>Property Details</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Property Title:</label>
+                <p id="propertyTitleDisplay">Cozy 2BHK Apartment</p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Property Type:</label>
+                <p id="propertyTypeDisplay">Apartment</p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Location:</label>
+                <p id="locationDisplay">Kozhikode</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rental Information Section -->
+    <div class="card mb-4">
+        <div class="card-header text-white" style="background-color: #0A35F4;">
+            <h5>Rental Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Monthly Rent (₹):</label>
+                    <p id="monthlyRentDisplay">15,000</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Security Deposit (₹):</label>
+                    <p id="depositDisplay">30,000</p>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Property Description:</label>
+                <p id="descriptionDisplay">A cozy and spacious 2BHK apartment in the heart of Kozhikode.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Section -->
+    <div class="card mb-4">
+        <div class="card-header text-white" style="background-color: #0A35F4;">
+            <h5>Property Images</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Uploaded Images:</label>
+                <div id="propertyImagesDisplay">
+                    <img src="property1.jpg" alt="Property Image" class="img-fluid mb-2" style="max-width: 100%; height: auto;">
+                    <img src="property2.jpg" alt="Property Image" class="img-fluid mb-2" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Details Section -->
+    <div class="card mb-4">
+        <div class="card-header text-white" style="background-color: #0A35F4;">
+            <h5>Contact Details</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Owner's Name:</label>
+                <p id="ownerNameDisplay">Richard Lucas</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email Address:</label>
+                    <p id="emailDisplay">example@email.com</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone Number:</label>
+                    <p id="phoneDisplay">+91 9876543210</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="horiline"></div>
+    <footer>
+
+      <div class="upfooter">
+          <!-- Left Column: Logo and Company Name -->
+          <div class="col-left">
+              <img src="{% static 'images/logo.png' %}" alt="Logo" width="130px"  height="171px"class="me-2">
+              <h4 class="fw-bold mb-0" style="font-size: 40px;">ApcoStays</h4>
+          </div>
+          <!-- Right Column: Contact Information and Social Media Icons -->
+          <div class="col-right">
+              <ul class="list-unstyled mb-2">
+                  <li><i class="fas fa-map-marker-alt text-primary me-2"></i> 345 Faulconer Drive, Suite 4, Charlottesville, CA, 12345</li>
+                  <li><i class="fas fa-phone text-primary me-2"></i> (123) 456-7890</li>
+                  <li><i class="fas fa-print text-primary me-2"></i> (123) 456-7890</li>
+              </ul>
+              <div class="container followus">
+                  <div class="d-flex align-items-center justify-content-center flex-wrap gap-3">
+                      <p class="mb-0">Follow Us:</p>
+                      <div class="d-flex gap-3">
+                          <a href="#" class="text-primary"><i class="fab fa-facebook fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-twitter fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-linkedin fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-youtube fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-instagram fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-google-plus fa-2x"></i></a>
+                          <a href="#" class="text-primary"><i class="fab fa-pinterest fa-2x"></i></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="horiline2"></div>
+
+      <div class="downfooter d-flex flex-column flex-md-row justify-content-between align-items-center">
+          <div class="col-12 col-md-6 mb-3 mb-md-0">
+          <ul class="list-inline mb-2 text-center text-md-start">
+            <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Home</a></li>
+            <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Browse All</a></li>
+            <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">List Your Rental</a></li>
+            <li class="list-inline-item me-4"><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none">Disclaimer</a></li>
+          </ul>
+            </div>
+            <div class="col-12 col-md-6 text-center text-md-end">
+          <p class="text-muted mb-0 text-center text-md-end">Copyright &copy; 2025 &bull; ApcoStays Ltd.</p>
+      </div>
+      </div>
+    </footer>
+
+</body>
+</html>
