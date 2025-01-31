@@ -17,18 +17,21 @@
     <div class="image-gallery">
         <!-- Large Image -->
         <div class="large-image">
-            <img id="mainImage" src="{% if images %}/media/{{ images.0 }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="Main Flat Image">
+            <img id="mainImage" src="{% if images %}{{ images.0.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="Main Flat Image">
         </div>
-
+    
         <!-- Small Images -->
         <div class="small-images">
             {% for image in images %}
-                <img src="/media/{{ image }}" alt="Flat Image {{ forloop.counter }}" onclick="changeImage(this)">
+                <img src="{{ image.image.url }}" alt="Flat Image {{ forloop.counter }}" onclick="changeImage(this)">
             {% empty %}
                 <img src="{% static 'images/flat-2.png' %}" alt="Default Image">
             {% endfor %}
         </div>
     </div>
+    
+    
+    
 
     <div class="container flat-details">
         <div class="points">

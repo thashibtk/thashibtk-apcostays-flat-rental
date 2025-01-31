@@ -75,10 +75,25 @@ def rental_success(request):
 
 
 def rental_details(request, rental_id):
+    # Retrieve the rental object using the rental_id
     rental = get_object_or_404(Rental, id=rental_id)
-    images = rental.images.all()  # Fetch related images
+    
+    # Access related images using the 'images' related name
+    images = rental.images.all()  # This will give you all the images related to this rental
+    
+    # Render the rental details template
+    return render(request, 'rental_details.html', {'rental': rental, 'images': images})
 
-    return render(request, 'details.html', {'rental': rental, 'images': images})
+def userrentals(request):
+    if 'user_id' not in request.session:
+        return redirect('login')  # Redirect to login if not authenticated
+
+    # Retrieve the logged-in user's rentals
+    user = RegisterDb.objects.get(UserID=request.session['user_id'])  # Assuming RegisterDb stores the user info
+    rentals = Rental.objects.filter(owner_name=user.Name)  # Assuming 'owner_name' is used to link rentals to users
+
+    return render(request, 'user_rentals.html', {'rentals': rentals})
+
 
 
 def viewprofile(request):

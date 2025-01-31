@@ -12,13 +12,8 @@ urlpatterns = [
     path('browseall/', views.browseall, name='browseall'),
     path('listrental/', views.list_rental, name='listrental'),
     path('rental_success/', views.rental_success, name='rental_success'),
-    path('showdetails/', views.rental_details, name='showdetails'),
-    path('rental/<int:rental_id>/', views.rental_details, name='rental_details'),
+    path('showdetails/<int:rental_id>/', views.rental_details, name='rental_details'),
     path('profile/', views.viewprofile, name='viewprofile'),
     path('editprofile/', views.editprofile, name='editprofile'),
-]
-
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('yourrentals/', views.userrentals, name='userrentals'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
