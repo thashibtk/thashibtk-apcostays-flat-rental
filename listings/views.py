@@ -3,7 +3,7 @@ import re
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.db import IntegrityError
-from .models import RegisterDb  # Import RegisterDb
+from .models import RegisterDb, RentalImage  # Import RegisterDb
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from .models import Rental
@@ -20,6 +20,23 @@ def browseall(request):
     return render(request, 'browseall.html')
 
 def list_rental(request):
+    # Check if user is logged in via session
+    if 'user_id' not in request.session:
+        return redirect('login')  # Redirect to login if not authenticated
+
+    # Retrieve logged-in user details from session
+    owner_name = ''
+    email = ''
+    phone = ''
+
+    try:
+        user = RegisterDb.objects.get(UserID=request.session['user_id'])
+        owner_name = user.Name  
+        email = user.Email
+        phone = getattr(user, 'Phone', '')  # Get phone if available
+    except RegisterDb.DoesNotExist:
+        pass
+
     if request.method == 'POST':
         title = request.POST.get('title')
         property_type = request.POST.get('property_type')
@@ -28,25 +45,9 @@ def list_rental(request):
         rent = request.POST.get('rent')
         deposit = request.POST.get('deposit')
         description = request.POST.get('description')
-        phone = request.POST.get('phone')
+        phone = request.POST.get('phone') or phone  # Use form input if phone is not already set
 
-        # Get logged-in user's name and email
-        if request.user.is_authenticated:
-            owner_name = request.user.get_full_name()
-            email = request.user.email
-        else:
-            owner_name = request.POST.get('owner_name')  # Use user input if not logged in
-            email = request.POST.get('email')
-
-        # Handle image upload
-        image_url = None
-        if 'image' in request.FILES:
-            image = request.FILES['image']
-            fs = FileSystemStorage(location='media/rentals/')  # Saves in media/rentals/
-            filename = fs.save(image.name, image)
-            image_url = 'rentals/' + filename  # Save relative path
-
-        # Save rental to the database
+        # Save rental details
         rental = Rental.objects.create(
             title=title,
             property_type=property_type,
@@ -57,15 +58,17 @@ def list_rental(request):
             description=description,
             owner_name=owner_name,
             email=email,
-            phone=phone,
-            image=image_url
+            phone=phone
         )
-        rental.save()
+
+        # Handle multiple image uploads
+        images = request.FILES.getlist('images')  # Get multiple images
+        for image in images:
+            RentalImage.objects.create(rental=rental, image=image)
 
         return redirect('rental_success')
 
-    return render(request, 'listrental.html')
-
+    return render(request, 'listrental.html', {'owner_name': owner_name, 'email': email, 'phone': phone})
 
 def rental_success(request):
     return render(request, 'listrental.html', {'message': 'Rental listing submitted successfully.'})

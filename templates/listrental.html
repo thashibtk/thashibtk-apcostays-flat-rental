@@ -62,23 +62,24 @@
                     <!-- Image Upload -->
                     <div class="field">
                         <label for="propertyImages" class="form-label">Upload Images</label>
-                        <input type="file" class="flatimgupload" id="propertyImages" name="image" required>
-                        <small class="text-muted">You can upload an image of your property.</small>
+                        <input type="file" id="propertyImages" name="images" multiple accept="image/*">
+                        <small class="text-muted">You can upload multiple images of your property.</small>
                     </div>
                 
                     <!-- Contact Details -->
                     <div class="field">
                         <label for="ownerName" class="form-label">Your Name</label>
-                        <input type="text" id="ownerName" name="owner_name" required>
+                        <input type="text" id="ownerName" name="owner_name" value="{{ owner_name }}" required readonly>
                     </div>
                     <div class="field">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" id="email" name="email">
+                        <input type="email" id="email" name="email" value="{{ email }}" readonly>
                     </div>
                     <div class="field">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required>
+                        <input type="tel" id="phone" name="phone" value="{{ phone }}" {% if phone %}readonly{% endif %} required>
                     </div>
+                    
 
                 
                     <!-- Submit Button -->

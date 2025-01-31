@@ -24,9 +24,14 @@ class Rental(models.Model):
     owner_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=15)
-    image = models.ImageField(upload_to='rentals/', blank=True, null=True)
 
     def __str__(self):
         return self.title
 
+class RentalImage(models.Model):
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='rentals/')
+
+    def __str__(self):
+        return f"Image for {self.rental.title}"
 
