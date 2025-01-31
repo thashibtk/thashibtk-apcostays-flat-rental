@@ -27,25 +27,24 @@
                     
                     <div class="field">
                         <label for="name" class="form-label">Full Name :</label>
-                        <input type="text" id="name" value="Richard Lucas" disabled>
+                        <input type="text" id="name" value="{{ name }}" disabled>
+
                     </div>
                     <div class="field">
                         <label for="email" class="form-label">Email :</label>
-                        <input type="email" id="email" value="example@email.com" disabled>
+                        <input type="email" id="email" value="{{ email }}" disabled>
                     </div>
                     <div class="field">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" id="location" value="Kozhikode" disabled>
+                        <input type="text" id="location" value="{{ location }}" disabled>
                     </div>
                     <div class="field">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" id="phone" value="+91 9876543210" disabled>
+                        <input type="tel" id="phone" value="{{ phone }}" disabled>
                     </div>
                     <div class="container button-container">
-                        <button class="savebutton" type="button" id="editButton">Edit Profile</button>
-                        <button class="savebutton savebtn" type="submit" id="saveButton" style="display: none;">Save</button>
-                    </div>
-                        
+                        <a href="{% url 'editprofile' %}" class="savebutton" id="editButton">Edit Profile</a>
+                    </div>                        
                     </div>
                 </form>
             </div>
@@ -53,19 +52,5 @@
     </div>
 </div>
 
-<script>
-document.getElementById('editButton').addEventListener('click', function() {
-    document.querySelectorAll('#profileForm input').forEach(input => input.removeAttribute('disabled'));
-    document.getElementById('editButton').style.display = 'none';
-    document.getElementById('saveButton').style.display = 'inline-block';
-});
-
-document.getElementById('profileForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    document.querySelectorAll('#profileForm input').forEach(input => input.setAttribute('disabled', 'true'));
-    document.getElementById('editButton').style.display = 'inline-block';
-    document.getElementById('saveButton').style.display = 'none';
-});
-</script>
-
 {% endblock %}
+

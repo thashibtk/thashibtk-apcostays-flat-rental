@@ -14,74 +14,79 @@
             <div class="title">Advertise Your Rental</div>
         </div>
         <div class="form-container">
+            {% if message %}
+                    <div class="alert alert-success">{{ message }}</div>
+                    {% endif %}
             <div class="form-inner">
-                <form>
+                <form method="POST" enctype="multipart/form-data" action="{% url 'listrental' %}">
+                    {% csrf_token %}
+                    
                     <!-- Property Details -->
                     <div class="field">
                         <label for="propertyTitle" class="form-label">Property Title</label>
-                        <input type="text" id="propertyTitle" placeholder="e.g., Galaxy Neon" required>
+                        <input type="text" id="propertyTitle" name="title" required>
                     </div>
                     <div class="field">
                         <label for="propertyType" class="form-label">Property Type</label>
-                        <select id="propertyType" class="form-select" required>
+                        <select id="propertyType" name="property_type" required>
                             <option value="" selected disabled>Choose a type</option>
-                            <option>Apartment</option>
-                            <option>House</option>
-                            <option>Villa</option>
-                            <option>Shared Room</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
+                            <option value="Villa">Villa</option>
+                            <option value="Shared Room">Shared Room</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="rooms" class="form-label">Rooms</label>
-                        <input type="number" id="rooms" placeholder="e.g., 2" min="1" required>
+                        <input type="number" id="rooms" name="rooms" min="1" required>
                     </div>
                     <div class="field">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" id="location" placeholder="e.g., Kozhikode" required>
+                        <input type="text" id="location" name="location" required>
                     </div>
-
+                
                     <!-- Rental Information -->
                     <div class="field">
                         <label for="monthlyRent" class="form-label">Monthly Rent (₹)</label>
-                        <input type="number" id="monthlyRent" placeholder="e.g., 15,000" required>
+                        <input type="number" id="monthlyRent" name="rent" required>
                     </div>
                     <div class="field">
                         <label for="deposit" class="form-label">Security Deposit (₹)</label>
-                        <input type="number" id="deposit" placeholder="e.g., 30,000" required>
+                        <input type="number" id="deposit" name="deposit" required>
                     </div>
                     <div class="field">
                         <label for="description" class="form-label">Property Description</label>
-                        <textarea id="description" rows="10" placeholder="Write a brief description of your property...(optional)"></textarea>
+                        <textarea id="description" name="description" rows="5"></textarea>
                     </div>
-
+                
                     <!-- Image Upload -->
                     <div class="field">
                         <label for="propertyImages" class="form-label">Upload Images</label>
-                        <input type="file" class="flatimgupload" id="propertyImages" multiple accept="image/*" required>
-                        <small class="text-muted">You can upload images of your property.</small>
+                        <input type="file" class="flatimgupload" id="propertyImages" name="image" required>
+                        <small class="text-muted">You can upload an image of your property.</small>
                     </div>
-
+                
                     <!-- Contact Details -->
                     <div class="field">
                         <label for="ownerName" class="form-label">Your Name</label>
-                        <input type="text" id="ownerName" placeholder="e.g., Richard Lucas" >
+                        <input type="text" id="ownerName" name="owner_name" required>
                     </div>
                     <div class="field">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" id="email" placeholder="e.g., example@email.com">
+                        <input type="email" id="email" name="email">
                     </div>
                     <div class="field">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="e.g., +91 9876543210" required>
+                        <input type="tel" id="phone" name="phone" required>
                     </div>
 
+                
                     <!-- Submit Button -->
                     <div class="field btn">
                         <div class="btn-layer"></div>
                         <input type="submit" value="Submit" >
                     </div>
-                    <div class="signup-link">Need to update your details? <a href="{% url 'signup' %}">Edit now</a></div>
-                </form>
+                </form>                
             </div>
         </div>
     </div>

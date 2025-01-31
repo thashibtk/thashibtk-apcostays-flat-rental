@@ -1,9 +1,15 @@
+import os
 import re
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.db import IntegrityError
 from .models import RegisterDb  # Import RegisterDb
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
+from .models import Rental
+from django.core.files.storage import FileSystemStorage
+from .models import Rental
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -13,14 +19,115 @@ def home(request):
 def browseall(request):
     return render(request, 'browseall.html')
 
-def listrental(request):
+def list_rental(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        property_type = request.POST.get('property_type')
+        rooms = request.POST.get('rooms')
+        location = request.POST.get('location')
+        rent = request.POST.get('rent')
+        deposit = request.POST.get('deposit')
+        description = request.POST.get('description')
+        phone = request.POST.get('phone')
+
+        # Get logged-in user's name and email
+        if request.user.is_authenticated:
+            owner_name = request.user.get_full_name()
+            email = request.user.email
+        else:
+            owner_name = request.POST.get('owner_name')  # Use user input if not logged in
+            email = request.POST.get('email')
+
+        # Handle image upload
+        image_url = None
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            fs = FileSystemStorage(location='media/rentals/')  # Saves in media/rentals/
+            filename = fs.save(image.name, image)
+            image_url = 'rentals/' + filename  # Save relative path
+
+        # Save rental to the database
+        rental = Rental.objects.create(
+            title=title,
+            property_type=property_type,
+            rooms=rooms,
+            location=location,
+            rent=rent,
+            deposit=deposit,
+            description=description,
+            owner_name=owner_name,
+            email=email,
+            phone=phone,
+            image=image_url
+        )
+        rental.save()
+
+        return redirect('rental_success')
+
     return render(request, 'listrental.html')
 
-def showdetails(request):
-    return render(request, 'showflat.html')
+
+def rental_success(request):
+    return render(request, 'listrental.html', {'message': 'Rental listing submitted successfully.'})
+
+
+def rental_details(request, rental_id):
+    rental = get_object_or_404(Rental, id=rental_id)
+    images = rental.images.all()  # Fetch related images
+
+    return render(request, 'details.html', {'rental': rental, 'images': images})
+
 
 def viewprofile(request):
-    return render(request, 'viewprofile.html')
+    # Ensure the user is logged in
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')  # Redirect to login if user is not authenticated
+
+    try:
+        # Fetch the user details
+        user = RegisterDb.objects.get(UserID=user_id)
+        context = {
+            'name': user.Name,
+            'email': user.Email,
+            'location': user.Location if hasattr(user, 'Location') else 'Not Provided',
+            'phone': user.Phone if hasattr(user, 'Phone') else 'Not Provided'
+        }
+        return render(request, 'viewprofile.html', context)
+    except RegisterDb.DoesNotExist:
+        return redirect('login')
+
+def editprofile(request):
+    # Check if the user is logged in
+    if 'user_id' not in request.session:
+        return redirect('login')  # Redirect to login if not logged in
+
+    user_id = request.session['user_id']  # Get logged-in user ID
+    user = RegisterDb.objects.get(UserID=user_id)  # Fetch user data
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        location = request.POST.get('location')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password and password != confirm_password:
+            return render(request, 'editprofile.html', {'user': user, 'error': 'Passwords do not match!'})
+
+        # Update user details
+        user.Name = name
+        user.Email = email
+        user.Location = location
+        user.Phone = phone
+        if password:
+            user.Password = make_password(password)  # Hash new password
+
+        user.save()
+        return redirect('viewprofile')  # Redirect to profile page after update
+
+    return render(request, 'editprofile.html', {'user': user})
 
 def login_view(request):
     if request.method == 'POST':
@@ -29,7 +136,6 @@ def login_view(request):
         try:
             user = RegisterDb.objects.get(Email=email)  # Retrieve user from custom model
             if check_password(password, user.Password):  # Check if the password matches the hashed password
-                # Log the user in (you might need a custom authentication mechanism here)
                 request.session['user_id'] = user.UserID  # Example of setting a session for the logged-in user
                 return render(request, 'home.html', {'greet': 'Welcome back!{}'.format(user.Name)})
             else:

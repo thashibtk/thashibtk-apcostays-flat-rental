@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ rental.title }} - Apcostays{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/details.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container flat-container">
+    <div class="flat-head">
+        <div class="flat-title">{{ rental.title }}</div>
+        <h2 class="flat-loc">{{ rental.location }}</h2>
+    </div>
+
+    
+To allow multiple image uploads for your rental listings, follow these steps:
+
+📌 Step 1: Update Your Model
+Since Django’s ImageField does not support multiple images in a single field, we create a separate model for storing multiple images.
+
+🔹 models.py
+python
+Copy
+Edit
+from django.db import models
+
+class Rental(models.Model):
+    title = models.CharField(max_length=255)
+    property_type = models.CharField(max_length=100)
+    rooms = models.IntegerField()
+    location = models.CharField(max_length=255)
+    rent = models.DecimalField(max_digits=10, decimal_places=2)
+    deposit = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(blank=True, null=True)
+    owner_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.title
+
+class RentalImage(models.Model):
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="rentals/")
+
+    def __str__(self):
+        return f"Image for {self.rental.title}"
+📌 Step 2: Update views.py to Handle Multiple Images
+Modify your listrental view to handle multiple image uploads:
+
+python
+Copy
+Edit
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Rental, RentalImage
+
+def listrental(request):
+    if request.method == 'POST':
+        title = request.POST.get('propertyTitle')
+        property_type = request.POST.get('propertyType')
+        rooms = request.POST.get('rooms')
+        location = request.POST.get('location')
+        rent = request.POST.get('monthlyRent')
+        deposit = request.POST.get('deposit')
+        description = request.POST.get('description')
+        owner_name = request.POST.get('ownerName')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+
+        # Save the main rental property details
+        rental = Rental.objects.create(
+            title=title,
+            property_type=property_type,
+            rooms=rooms,
+            location=location,
+            rent=rent,
+            deposit=deposit,
+            description=description,
+            owner_name=owner_name,
+            email=email,
+            phone=phone
+        )
+
+        # Handle multiple image uploads
+        images = request.FILES.getlist('propertyImages')  # Get multiple images
+        for image in images:
+            RentalImage.objects.create(rental=rental, image=image)
+
+        return redirect('rental_success')
+
+    return render(request, 'listrental.html')
+📌 Step 3: Modify listrental.html for Multiple Image Upload
+Ensure that your form accepts multiple images by updating the input tag.
+
+🔹 listrental.html
+html
+Copy
+Edit
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Property Images Upload -->
+    <div class="field">
+        <label for="propertyImages" class="form-label">Upload Images</label>
+        <input type="file" class="flatimgupload" id="propertyImages" name="propertyImages" multiple accept="image/*" required>
+        <small class="text-muted">You can upload multiple images of your property.</small>
+    </div>
+
+    <div class="field btn">
+        <input type="submit" value="Submit">
+    </div>
+</form>
+🛑 Important:
+enctype="multipart/form-data" is required for file uploads.
+multiple allows multiple file selection.
+📌 Step 4: Update details.html to Display Images
+Modify details.html to display multiple images dynamically.
+
+🔹 details.html
+html
+Copy
+Edit
+<div class="image-gallery">
+    <!-- Large Image -->
+    <div class="large-image">
+        {% if images %}
+            <img id="mainImage" src="/media/{{ images.0.image }}" alt="Main Flat Image">
+        {% else %}
+            <img id="mainImage" src="{% static 'images/flat.png' %}" alt="Main Flat Image">
+        {% endif %}
+    </div>
+
+    <!-- Small Images -->
+    <div class="small-images">
+        {% for image in images %}
+            <img src="/media/{{ image.image }}" alt="Flat Image {{ forloop.counter }}" onclick="changeImage(this)">
+        {% empty %}
+            <img src="{% static 'images/flat-2.png' %}" alt="Default Image">
+        {% endfor %}
+    </div>
+</div>
+
+    <div class="container flat-details">
+        <div class="points">
+            <button class="pointbtn">{{ rental.property_type }}</button>
+            <button class="pointbtn">{{ rental.rooms }} Rooms</button>
+        </div>
+        <div class="flat-price">
+            <h3 class="flat-amount">
+                <span class="rent"> Rent: </span>₹ {{ rental.rent }} <span class="permonth">/ month</span>
+            </h3>
+        </div>
+        <div class="discription">
+            <h3 class="flat-discription">Description</h3>
+            <p class="flat-discription">{{ rental.description }}</p>
+            <h3 class="sdeposit mb-3">Security Deposit: ₹ {{ rental.deposit }} </h3>
+        </div>
+
+        <div class="dropdown">
+            <a class="login-button d-inline-block mt-3 mt-lg-0 log dropdown-toggle" href="#" role="button" id="contactDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Contact
+            </a>
+        
+            <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="profileDropdown">
+                <li><h3 class="dropdown-item">{{ rental.owner_name }}</h3></li>
+                <li><a class="dropdown-item" href="tel:{{ rental.phone }}">{{ rental.phone }}</a></li>
+                <li><a class="dropdown-item" href="mailto:{{ rental.email }}">{{ rental.email }}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeImage(smallImg) {
+        let mainImage = document.getElementById("mainImage");
+        mainImage.src = smallImg.src;
+    }
+</script>
+
+{% endblock %}
