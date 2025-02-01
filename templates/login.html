@@ -13,11 +13,14 @@
             <div class="title login">Sign In to Your Account</div>
         </div>
         <div class="form-container">
-            {% if message %}
-                <div class="alert alert-success">{{ message }}</div>
-            {% endif %}
-            {% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
             {% endif %}
             <div class="form-inner">
                 <form action="{% url 'login' %}" method="post" class="login">

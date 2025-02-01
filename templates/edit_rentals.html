@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit {{ rental.title }} - Apcostays{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/editrental.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container flat-container">
+    <div class="container detailsdiv">
+    <div class="flat-head">
+        <div class="flat-title">{{ rental.title }}</div>
+        <h2 class="flat-loc">{{ rental.location }}</h2>
+    </div>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'editrental' rental.id %}">
+    <div class="image-gallery">
+        <!-- Large Image -->
+        <div class="large-image">
+            <img id="mainImage" src="{% if images %}{{ images.0.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="Main Flat Image">
+        </div>
+
+        <!-- Small Images -->
+        <div class="small-images">
+            {% for image in images %}
+                <div class="image-thumbnail">
+                    <div class="image-wrapper">
+                        <img src="{{ image.image.url }}" alt="Flat Image {{ forloop.counter }}" onclick="changeImage(this)">
+                        
+                        <!-- Delete button (cross icon) -->
+                        <button type="button" class="delete-btn" onclick="deleteImage({{ image.id }})">×</button>
+
+                        <!-- Hidden checkbox for deletion (Inside the form now) -->
+                        <input type="checkbox" name="delete_images" value="{{ image.id }}" id="delete_image_{{ image.id }}" style="display: none;">
+                    </div>
+                </div>
+            {% empty %}
+                <img src="{% static 'images/flat-2.png' %}" alt="Default Image">
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+    <!-- Rental Details Form -->
+    <div class="logsincontainer mt-5">  
+        <div class="wrapper">
+            <div class="title-text">
+                <div class="title">Edit Your Rental</div>
+            </div>
+            <div class="form-container">
+                <div class="form-inner">
+                    
+                        {% csrf_token %}
+                        
+                        <!-- Property Details -->
+                        <div class="field">
+                            <label for="propertyTitle" class="form-label">Property Title</label>
+                            <input type="text" id="propertyTitle" name="title" value="{{ rental.title }}" required>
+                        </div>
+                        <div class="field">
+                            <label for="propertyType" class="form-label">Property Type</label>
+                            <select id="propertyType" name="property_type" required>
+                                <option value="Apartment" {% if rental.property_type == 'Apartment' %}selected{% endif %}>Apartment</option>
+                                <option value="House" {% if rental.property_type == 'House' %}selected{% endif %}>House</option>
+                                <option value="Villa" {% if rental.property_type == 'Villa' %}selected{% endif %}>Villa</option>
+                                <option value="Shared Room" {% if rental.property_type == 'Shared Room' %}selected{% endif %}>Shared Room</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="rooms" class="form-label">Rooms</label>
+                            <input type="number" id="rooms" name="rooms" value="{{ rental.rooms }}" min="1" required>
+                        </div>
+                        <div class="field">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" id="location" name="location" value="{{ rental.location }}" required>
+                        </div>
+                    
+                        <!-- Rental Information -->
+                        <div class="field">
+                            <label for="monthlyRent" class="form-label">Monthly Rent (₹)</label>
+                            <input type="number" id="monthlyRent" name="rent" value="{{ rental.rent }}" required>
+                        </div>
+                        <div class="field">
+                            <label for="deposit" class="form-label">Security Deposit (₹)</label>
+                            <input type="number" id="deposit" name="deposit" value="{{ rental.deposit }}" required>
+                        </div>
+                        <div class="field">
+                            <label for="description" class="form-label">Property Description</label>
+                            <textarea id="description" name="description" rows="5">{{ rental.description }}</textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="field">
+                            <label for="propertyImages" class="form-label">Upload Images</label>
+                            <input class="form-control flatimgupload" type="file" id="propertyImages" name="images" multiple accept="image/*" onchange="previewImages()">
+                            <small class="text-muted">You can upload multiple images of your property.</small>
+                        
+                            <div id="imagePreviews" class="image-previews" style=" margin-top: 10px; display: none;">
+                                <!-- Selected images will be displayed here -->
+                                
+                            </div>
+                            
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="container button-container">
+                            <button type="submit" class="savebutton savebtn">Save</button>
+                            <button type="button" class="savebutton cancelbtn" id="editButton" onclick="window.location.href='{% url 'rental_details' rental.id %}'">Cancel</button>
+                        </div> 
+                    </form>                
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function changeImage(smallImg) {
+        let mainImage = document.getElementById("mainImage");
+        mainImage.src = smallImg.src;
+    }
+
+    function deleteImage(imageId) {
+        // Find the checkbox that corresponds to the clicked image
+        var checkbox = document.querySelector('input[name="delete_images"][value="' + imageId + '"]');
+        
+        // Toggle the checkbox selection (mark it for deletion)
+        checkbox.checked = !checkbox.checked;
+        
+        // Optionally, you can hide the image preview or add more logic here
+        var imageItem = checkbox.closest('.image-thumbnail');
+        
+        // Hide the image only when it is marked for deletion
+        if (checkbox.checked) {
+            imageItem.style.display = 'none'; // Hide the image
+        } else {
+            imageItem.style.display = 'block'; // Show the image again if unchecked
+        }
+    }
+
+
+
+        let selectedFiles = []; // Array to store selected files
+    
+        function previewImages() {
+            const previewContainer = document.getElementById('imagePreviews');
+            const input = document.getElementById('propertyImages');
+            const files = Array.from(input.files);
+    
+            selectedFiles = [...files]; // Reset selected files list
+    
+            previewContainer.innerHTML = ''; // Clear existing previews
+    
+            if (selectedFiles.length === 0) {
+                previewContainer.style.display = 'none';
+                return;
+            }
+    
+            previewContainer.style.display = 'block';
+    
+            selectedFiles.forEach((file, index) => {
+                if (file && file.type.startsWith('image')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imageWrapper = document.createElement('div');
+                        imageWrapper.style.display = 'inline-block';
+                        imageWrapper.style.position = 'relative';
+                        imageWrapper.style.marginRight = '10px';
+                        imageWrapper.style.marginBottom = '10px';
+    
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Image Preview';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+    
+                        const removeBtn = document.createElement('button');
+                        removeBtn.innerHTML = '×';
+                        removeBtn.style.position = 'absolute';
+                        removeBtn.style.top = '0';
+                        removeBtn.style.right = '0';
+                        removeBtn.style.backgroundColor = 'red';
+                        removeBtn.style.color = 'white';
+                        removeBtn.style.border = 'none';
+                        removeBtn.style.borderRadius = '50%';
+                        removeBtn.style.padding = '5px';
+                        removeBtn.style.fontSize = '14px';
+                        removeBtn.style.cursor = 'pointer';
+    
+                        // Remove image from selection when 'X' is clicked
+                        removeBtn.onclick = function () {
+                            selectedFiles.splice(index, 1); // Remove from selected files
+                            updateFileInput(); // Update the file input
+                            previewImages(); // Refresh previews
+                        };
+    
+                        imageWrapper.appendChild(img);
+                        imageWrapper.appendChild(removeBtn);
+                        previewContainer.appendChild(imageWrapper);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    
+        function updateFileInput() {
+            const input = document.getElementById('propertyImages');
+            const dataTransfer = new DataTransfer();
+    
+            selectedFiles.forEach(file => dataTransfer.items.add(file)); // Add remaining files
+    
+            input.files = dataTransfer.files; // Update file input
+    
+            // If no files are left, clear the input completely
+            if (selectedFiles.length === 0) {
+                input.value = ''; // Reset input box
+                document.getElementById('imagePreviews').style.display = 'none';
+            }
+        }
+    
+</script>
+{% endblock %}
+

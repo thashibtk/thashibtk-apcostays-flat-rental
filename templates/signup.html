@@ -14,12 +14,19 @@
             <div class="title signup">Create Your Account</div>
         </div>
         <div class="form-container">
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="form-inner">
                 <form action="{% url 'signup' %}" method="post" class="signup">
                     {% csrf_token %}
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
+                
                     <div class="field">
                         <input type="text" name="name" placeholder="Full Name" required>
                     </div>

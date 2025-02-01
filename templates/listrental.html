@@ -14,9 +14,6 @@
             <div class="title">Advertise Your Rental</div>
         </div>
         <div class="form-container">
-            {% if message %}
-                    <div class="alert alert-success">{{ message }}</div>
-                    {% endif %}
             <div class="form-inner">
                 <form method="POST" enctype="multipart/form-data" action="{% url 'listrental' %}">
                     {% csrf_token %}
@@ -62,8 +59,14 @@
                     <!-- Image Upload -->
                     <div class="field">
                         <label for="propertyImages" class="form-label">Upload Images</label>
-                        <input type="file" id="propertyImages" name="images" multiple accept="image/*">
+                        <input class="form-control flatimgupload" type="file" id="propertyImages" name="images" multiple accept="image/*" onchange="previewImages()">
                         <small class="text-muted">You can upload multiple images of your property.</small>
+                    
+                        <div id="imagePreviews" class="image-previews" style=" margin-top: 10px; display: none;">
+                            <!-- Selected images will be displayed here -->
+                            
+                        </div>
+                        
                     </div>
                 
                     <!-- Contact Details -->
@@ -92,4 +95,85 @@
         </div>
     </div>
 </div>
+
+<script>
+    let selectedFiles = []; // Array to store selected files
+
+    function previewImages() {
+        const previewContainer = document.getElementById('imagePreviews');
+        const input = document.getElementById('propertyImages');
+        const files = Array.from(input.files);
+
+        selectedFiles = [...files]; // Reset selected files list
+
+        previewContainer.innerHTML = ''; // Clear existing previews
+
+        if (selectedFiles.length === 0) {
+            previewContainer.style.display = 'none';
+            return;
+        }
+
+        previewContainer.style.display = 'block';
+
+        selectedFiles.forEach((file, index) => {
+            if (file && file.type.startsWith('image')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.style.display = 'inline-block';
+                    imageWrapper.style.position = 'relative';
+                    imageWrapper.style.marginRight = '10px';
+                    imageWrapper.style.marginBottom = '10px';
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Image Preview';
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.innerHTML = '×';
+                    removeBtn.style.position = 'absolute';
+                    removeBtn.style.top = '0';
+                    removeBtn.style.right = '0';
+                    removeBtn.style.backgroundColor = 'red';
+                    removeBtn.style.color = 'white';
+                    removeBtn.style.border = 'none';
+                    removeBtn.style.borderRadius = '50%';
+                    removeBtn.style.padding = '5px';
+                    removeBtn.style.fontSize = '14px';
+                    removeBtn.style.cursor = 'pointer';
+
+                    // Remove image from selection when 'X' is clicked
+                    removeBtn.onclick = function () {
+                        selectedFiles.splice(index, 1); // Remove from selected files
+                        updateFileInput(); // Update the file input
+                        previewImages(); // Refresh previews
+                    };
+
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(removeBtn);
+                    previewContainer.appendChild(imageWrapper);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function updateFileInput() {
+        const input = document.getElementById('propertyImages');
+        const dataTransfer = new DataTransfer();
+
+        selectedFiles.forEach(file => dataTransfer.items.add(file)); // Add remaining files
+
+        input.files = dataTransfer.files; // Update file input
+
+        // If no files are left, clear the input completely
+        if (selectedFiles.length === 0) {
+            input.value = ''; // Reset input box
+            document.getElementById('imagePreviews').style.display = 'none';
+        }
+    }
+</script>
+
 {% endblock %}

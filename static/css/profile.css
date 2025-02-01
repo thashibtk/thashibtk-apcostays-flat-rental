@@ -83,12 +83,13 @@
     justify-content: flex-end;
     margin-top: 20px;
     align-items: center;
+    text-align: center;
 }
 
 .savebutton {
     background-color: #3b72caa4;
     margin-top: 10px;
-    width: 150px;
+    width: 100px;
     height: 40px;
     color: white;
     padding: 10px 20px;
@@ -96,6 +97,7 @@
     border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
+    transition: all 0.3s ease;
 }
 .savebutton:hover {
     background-color: #3B71CA;
@@ -109,3 +111,11 @@
   background-color: #14A44D;
 }
   
+.cancelbtn{
+  margin-left: 10px;
+  background-color: #a41414a4;
+}
+
+.cancelbtn:hover{
+  background-color: #A41414;
+}

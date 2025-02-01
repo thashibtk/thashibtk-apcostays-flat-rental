@@ -7,127 +7,35 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="container">
         <div class="container mt-5 ms-3">
             <h3 class="browse">Discover Listings</h3>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <!-- Card 1 -->
+                
+                {% for rental in rentals %}
                 <div class="col mb-5">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static '/images/flat.png' %}" alt="">
+                    <div class="flat" style="cursor:pointer;" onclick="window.location.href='{% url 'rental_details' rental.id %}'">
+                        <img class="flat-img" src="{% if rental.images.all %}{{ rental.images.first.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="{{ rental.title }}">
                         <div class="flat-tag">
-                            <h3 class="flat-title">Galaxy Neon</h3>
+                            <h3 class="flat-title">{{ rental.title }}</h3>
                             <h2 class="flat-loc">
                                 <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
                                     <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
                                 </svg>
-                                Eranhipalam, Kozhikode
+                                {{ rental.location }}
                             </h2>
                             <div class="horiline3"></div>
                             <div class="flat-price">
-                                <h3 class="flat-amount">₹ 25,000 <span class="permonth">/ month</span></h3>
+                                <h3 class="flat-amount">₹ {{ rental.rent }} <span class="permonth">/ month</span></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Card 2 -->
-                <div class="col">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static '/images/flat.png' %}" alt="">
-                        <div class="flat-tag">
-                            <h3 class="flat-title">Skyline Heights</h3>
-                            <h2 class="flat-loc">
-                                <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
-                                    <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
-                                </svg>
-                                Beach Road, Calicut
-                            </h2>
-                            <div class="horiline3"></div>
-                            <div class="flat-price">
-                                <h3 class="flat-amount">₹ 30,000 <span class="permonth">/ month</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="col">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static 'images/flat.png' %}" alt="">
-                        <div class="flat-tag">
-                            <h3 class="flat-title">Ocean View</h3>
-                            <h2 class="flat-loc">
-                                <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
-                                    <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
-                                </svg>
-                                Malappuram, Kerala
-                            </h2>
-                            <div class="horiline3"></div>
-                            <div class="flat-price">
-                                <h3 class="flat-amount">₹ 22,000 <span class="permonth">/ month</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 4 -->
-                <div class="col">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static 'images/flat.png' %}" alt="">
-                        <div class="flat-tag">
-                            <h3 class="flat-title">Hilltop Residency</h3>
-                            <h2 class="flat-loc">
-                                <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
-                                    <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
-                                </svg>
-                                Wayanad, Kerala
-                            </h2>
-                            <div class="horiline3"></div>
-                            <div class="flat-price">
-                                <h3 class="flat-amount">₹ 28,000 <span class="permonth">/ month</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 5 -->
-                <div class="col">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static 'images/flat.png' %}" alt="">
-                        <div class="flat-tag">
-                            <h3 class="flat-title">Hilltop Residency</h3>
-                            <h2 class="flat-loc">
-                                <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
-                                    <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
-                                </svg>
-                                Wayanad, Kerala
-                            </h2>
-                            <div class="horiline3"></div>
-                            <div class="flat-price">
-                                <h3 class="flat-amount">₹ 28,000 <span class="permonth">/ month</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 6 -->
-                <div class="col">
-                    <div class="flat" style="cursor:pointer;">
-                        <img class="flat-img" src="{% static 'images/flat.png' %}" alt="">
-                        <div class="flat-tag">
-                            <h3 class="flat-title">Hilltop Residency</h3>
-                            <h2 class="flat-loc">
-                                <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
-                                    <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
-                                </svg>
-                                Wayanad, Kerala
-                            </h2>
-                            <div class="horiline3"></div>
-                            <div class="flat-price">
-                                <h3 class="flat-amount">₹ 28,000 <span class="permonth">/ month</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% empty %}
+                <p>No listings available.</p>
+                {% endfor %}
+                
             </div>
         </div>
     </div>
-    
 {% endblock %}

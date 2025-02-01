@@ -1,0 +1,425 @@
+.flat-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.flat-head {
+    display: block; /* Default block display */
+    text-align: left; /* Align text to the left */
+    margin: 5px;
+}
+
+.flat-title {
+    font-size: 44px;
+    font-weight: bold;
+    color: #333; /* Added color for title */
+    margin: 0px;
+}
+
+.flat-loc {
+    font-size: 18px;
+    color: #555; /* Changed color for better readability */
+    margin-left: 5px;
+}
+
+@media (max-width: 480px) {
+    .flat-loc {
+        margin-left: 0px;
+    }
+}
+
+.image-gallery {
+    display: flex;
+    flex-direction: row;  /* Keeps it in row layout for larger screens */
+    align-items: center;
+    gap: 20px;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for the gallery */
+    max-width: 100%;  /* Ensures no overflow */
+    min-height: 400px; /* Ensures fixed height for the gallery div */
+}
+
+.large-image {
+    width: 100%; /* Ensures the div occupies full width of the gallery */
+    max-width: 600px; /* Prevents it from becoming too wide */
+    height: 300px; /* Keeps the height fixed */
+    overflow: hidden; /* Ensures content doesn't overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 769px) {
+    .large-image {
+        margin-left: 20px;
+    }
+}
+
+.large-image img {
+    width: 100%; /* Makes the image responsive */
+    height: 100%; /* Ensures image takes the full height of the container */
+    object-fit: cover; /* Ensures image fills the div without stretching */
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+.small-images {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px; /* Added margin to separate small images from the large one */
+}
+
+.small-images img {
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.small-images img:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .image-gallery {
+        flex-direction: column;  /* Stack images vertically on smaller screens */
+    }
+
+    .small-images img {
+        width: 80px;
+    }
+
+    .flat-title {
+        font-size: 35px; /* Adjusted for mid-sized screens */
+    }
+
+    .large-image img {
+        width: 100%; /* Ensures large image is fully responsive */
+        height: auto; /* Maintains aspect ratio */
+    }
+}
+
+
+.image-thumbnail {
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.delete-btn {
+  position: absolute;
+  top: -16px;
+  right: -10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.delete-btn:hover {
+  color: darkred;
+}
+
+
+
+@media (max-width: 480px) {
+    .flat-title {
+        font-size: 20px;
+    }
+
+    .flat-loc {
+        font-size: 16px; /* Slightly smaller font for small screens */
+    }
+
+    .large-image img {
+        width: 100%;
+        max-width: 100%; /* Ensures that large image takes up full width */
+        height: auto;
+    }
+
+    .small-images img {
+        width: 60px; /* Smaller images on smaller screens */
+    }
+}
+
+.points {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: left; /* Center align for better responsiveness */
+}
+
+
+
+.pointbtn {
+    border: 1px solid white;
+    border-radius: 20px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    background-color: rgba(129, 167, 243, 0.989);
+    cursor: default !important;
+    margin: 5px; /* Added margin for spacing between buttons */
+}
+
+@media (max-width: 768px) {
+    .pointbtn {
+        padding: 5px 10px; /* Adjust padding for mid-sized screens */
+        font-size: 14px; /* Adjust font size for mid-sized screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .pointbtn {
+        padding: 5px 8px; /* Adjust padding for small screens */
+        font-size: 12px; /* Adjust font size for small screens */
+    }
+}
+
+.flat-details{
+    padding: 5px;
+}
+
+.flat-price{
+    display: flex;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center; /* Center align for better responsiveness */
+}
+
+.rent{
+    font-size: 30px;
+    font-weight: lighter;
+    text-align: center; /* Center text for better responsiveness */
+}
+
+.flat-amount{
+    font-size: 40px;
+    font-weight: bold; 
+    text-align: center; /* Center text for better responsiveness */
+}
+
+.permonth{
+    color: #5c5c5c;
+    font-size: 30px;
+    margin-left: 10px;
+    font-weight: lighter;
+    text-align: center; /* Center text for better responsiveness */
+}
+
+@media (max-width: 768px) {
+    .rent, .flat-amount, .permonth {
+        font-size: 25px;
+        margin-top: 10px; /* Adjust font size for mid-sized screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .rent, .flat-amount, .permonth {
+        font-size: 20px; /* Adjust font size for small screens */
+    }
+}
+
+.discription h3{
+    font-size: 20px;
+    font-weight: lighter;
+    margin-top: 20px;
+}
+
+.discription p{
+    font-size: 20px;
+    font-weight: lighter;
+    margin-top: 10px;
+    text-align: center ;
+}
+
+
+
+
+.wrapper{
+    overflow: hidden;
+    width: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(206, 221, 244, 0.518) 100%);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 10px 15px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .wrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 15px 20px 25px rgba(0,0,0,0.2);
+  }
+  .wrapper .title-text{
+    display: flex;
+    width: 200%;
+  }
+  .wrapper .title{
+    width: 50%;
+    font-size: 35px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+  }
+  
+    form{
+      display: ruby;
+    }
+  
+    .form-label{
+      font-size: 20px;
+      font-weight: 550;
+      margin-top: 20px;
+    }
+  
+    
+    .wrapper .form-container{
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    
+    .form-inner form .field{
+      height: 50px;
+      width: 100%;
+      margin-top: 20px;
+    }
+  
+    .form-inner form .field textarea{
+      height: 150px !important;
+    }
+    
+  .form-inner .field input,
+  .form-inner .field textarea,
+  .form-inner .field select{
+      height: 50px;
+      width: 100%;
+      outline: none;
+      padding-left: 15px;
+      border-radius: 15px;
+      border: 1px solid lightgrey;
+      border-bottom-width: 2px;
+      font-size: 17px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-inner  .field input:focus,
+    .form-inner .field textarea:focus,
+    .form-inner .field select:focus{
+      border-color: #1a75ff;
+      box-shadow: inset 0 0 3px #5268cb;
+    }
+    .form-inner .field input::placeholder,
+  .form-inner .field textarea::placeholder{
+      color: #999;
+      transition: all 0.3s ease;
+    }
+   .field input:focus::placeholder,
+ .field textarea:focus::placeholder,
+.field select:focus::placeholder{
+      color: #1a75ff;
+    }
+    
+    .form-inner.signup-link{
+      text-align: center;
+      margin-top: 30px;
+    }
+  
+    .flatimgupload{
+    padding-top: 11px;
+  }
+    
+    
+    form .btn{
+      height: 100%;
+      width: 100%;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    form .btn .btn-layer{
+      height: 100%;
+      width: 300%;
+      position: absolute;
+      left: -100%;
+      background: -webkit-linear-gradient(right,#003366,#004080,#0059b3, #0073e6);
+      transition: all 0.4s ease;;
+    }
+    
+    form .btn:hover .btn-layer{
+      left: 0;
+    }
+    
+    form .btn input[type="submit"]{
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      position: relative;
+      background: none;
+      border: none;
+      color: #fff;
+      padding-left: 0;
+      border-radius: 15px;
+      font-size: 20px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .savebutton {
+        background-color: #3b72caa4;
+        margin-top: 10px;
+        width: 100px;
+        height: 40px;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    .savebutton:hover {
+        background-color: #3B71CA;
+    }
+    
+    .savebtn{
+      background-color: #14a44e98;
+    }
+    
+    .savebtn:hover{
+      background-color: #14A44D;
+    }
+      
+    .cancelbtn{
+      margin-left: 10px;
+      background-color: #a41414a4;
+    }
+    
+    .cancelbtn:hover{
+      background-color: #A41414;
+    }  

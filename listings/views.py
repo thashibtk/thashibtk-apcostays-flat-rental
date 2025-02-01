@@ -1,43 +1,53 @@
-import os
 import re
-from django.shortcuts import render, redirect,get_object_or_404
-from django.contrib.auth import login as auth_login
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
-from .models import RegisterDb, RentalImage  # Import RegisterDb
+from .models import RegisterDb, RentalImage
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth.decorators import login_required
 from .models import Rental
-from django.core.files.storage import FileSystemStorage
-from .models import Rental
-from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    rentals = Rental.objects.all().order_by('-id')[:6]  # Get latest 6 rentals
+
+    if 'user_id' in request.session:
+        user = RegisterDb.objects.get(UserID=request.session['user_id'])
+        greet = f'Welcome Back, {user.Name}!'
+    else:
+        greet = 'Welcome, Guest!'  # Default greeting for guests (not logged in)
+
+    return render(request, 'home.html', {'rentals': rentals, 'greet': greet})
+
 
 def browseall(request):
-    return render(request, 'browseall.html')
+    # Fetch all rental listings from the database
+    rentals = Rental.objects.all().order_by('-id')  # Get all rentals, ordered by newest first
+    return render(request, 'browseall.html', {'rentals': rentals})
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Rental, RegisterDb, RentalImage
 
 def list_rental(request):
     # Check if user is logged in via session
     if 'user_id' not in request.session:
-        return redirect('login')  # Redirect to login if not authenticated
-
-    # Retrieve logged-in user details from session
-    owner_name = ''
-    email = ''
-    phone = ''
+        # Save the current URL to redirect to it after login
+        request.session['next_url'] = request.path
+        return render(request, 'login.html', {'message': 'Please log in to list a rental.'})
 
     try:
+        # Get the current logged-in user
         user = RegisterDb.objects.get(UserID=request.session['user_id'])
-        owner_name = user.Name  
+        owner_name = user.Name
         email = user.Email
-        phone = getattr(user, 'Phone', '')  # Get phone if available
+        phone = getattr(user, 'Phone', '')  # Get phone if exists, else default to empty string
     except RegisterDb.DoesNotExist:
-        pass
+        owner_name = email = phone = ''
 
     if request.method == 'POST':
+        # Get form data
         title = request.POST.get('title')
         property_type = request.POST.get('property_type')
         rooms = request.POST.get('rooms')
@@ -45,9 +55,8 @@ def list_rental(request):
         rent = request.POST.get('rent')
         deposit = request.POST.get('deposit')
         description = request.POST.get('description')
-        phone = request.POST.get('phone') or phone  # Use form input if phone is not already set
 
-        # Save rental details
+        # Save rental details with owner as foreign key
         rental = Rental.objects.create(
             title=title,
             property_type=property_type,
@@ -56,51 +65,118 @@ def list_rental(request):
             rent=rent,
             deposit=deposit,
             description=description,
-            owner_name=owner_name,
-            email=email,
-            phone=phone
+            owner=user,  # Set the logged-in user as the owner
         )
 
         # Handle multiple image uploads
-        images = request.FILES.getlist('images')  # Get multiple images
+        images = request.FILES.getlist('images')  # Get list of uploaded images
         for image in images:
             RentalImage.objects.create(rental=rental, image=image)
 
-        return redirect('rental_success')
+        # Add success message
+        messages.success(request, 'Rental listing submitted successfully.')
+
+        # Redirect to user rentals page after successful listing
+        return redirect('userrentals')  # You can change this to your specific URL name for user rentals
 
     return render(request, 'listrental.html', {'owner_name': owner_name, 'email': email, 'phone': phone})
 
-def rental_success(request):
-    return render(request, 'listrental.html', {'message': 'Rental listing submitted successfully.'})
 
 
 def rental_details(request, rental_id):
-    # Retrieve the rental object using the rental_id
+    # Check if the user is logged in via session
+    if 'user_id' not in request.session:
+        request.session['next_url'] = request.path
+        messages.info(request, 'Please log in to view the rental details.')  # Add a message
+        return render(request, 'login.html')
+
+    # Get the rental property by ID
     rental = get_object_or_404(Rental, id=rental_id)
-    
-    # Access related images using the 'images' related name
-    images = rental.images.all()  # This will give you all the images related to this rental
-    
-    # Render the rental details template
-    return render(request, 'rental_details.html', {'rental': rental, 'images': images})
+
+    # Get all images related to this rental (assuming you have a related name 'images')
+    images = rental.images.all()
+
+    # Check if the logged-in user is the owner of the rental property
+    is_owner = rental.owner.UserID == request.session.get('user_id')
+
+    # Pass the rental, images, and ownership status to the template
+    return render(request, 'rental_details.html', {
+        'rental': rental,
+        'images': images,
+        'is_owner': is_owner
+    })
 
 def userrentals(request):
     if 'user_id' not in request.session:
-        return redirect('login')  # Redirect to login if not authenticated
+        request.session['next_url'] = request.path
 
     # Retrieve the logged-in user's rentals
     user = RegisterDb.objects.get(UserID=request.session['user_id'])  # Assuming RegisterDb stores the user info
-    rentals = Rental.objects.filter(owner_name=user.Name)  # Assuming 'owner_name' is used to link rentals to users
+    rentals = Rental.objects.filter(owner=user)  # Use foreign key to filter rentals by user
 
     return render(request, 'user_rentals.html', {'rentals': rentals})
 
+def edit_rental(request, rental_id):
+    rental = get_object_or_404(Rental, id=rental_id)
+
+    # Check if the logged-in user is the owner of the rental
+    if 'user_id' not in request.session or rental.owner_id != request.session.get('user_id'):
+        messages.error(request, 'You are not authorized to edit this rental.')
+        return redirect('home')
+
+    if request.method == 'POST':
+        rental.title = request.POST.get('title')
+        rental.property_type = request.POST.get('property_type')
+        rental.rooms = request.POST.get('rooms')
+        rental.location = request.POST.get('location')
+        rental.rent = request.POST.get('rent')
+        rental.deposit = request.POST.get('deposit')
+        rental.description = request.POST.get('description')
+
+        rental.save()
+
+        # Debugging: Print the data to check if delete_images checkboxes are being submitted
+        delete_image_ids = request.POST.getlist('delete_images')
+        print("Delete Images:", delete_image_ids)  # Print the IDs of images to be deleted
+
+        if delete_image_ids:
+            RentalImage.objects.filter(id__in=delete_image_ids).delete()
+
+        # Handle new image uploads
+        new_images = request.FILES.getlist('images')
+        for image in new_images:
+            RentalImage.objects.create(rental=rental, image=image)
+            
+        messages.success(request, 'Rental details updated successfully!')
+        return redirect('rental_details', rental_id=rental.id)
+
+    # Fetch associated images for the rental and pass them to the template
+    images = RentalImage.objects.filter(rental=rental)
+
+    return render(request, 'edit_rentals.html', {'rental': rental, 'images': images})
+
+
+
+
+def delete_rental(request, rental_id):
+    rental = get_object_or_404(Rental, id=rental_id)
+    
+    if rental.owner.UserID != request.session.get('user_id'):
+        return render(request, 'error.html', {'message': 'You are not authorized to delete this rental.'})
+
+    rental.delete()
+    messages.success(request, 'The rental has been deleted successfully.')
+
+    return redirect('userrentals')
 
 
 def viewprofile(request):
     # Ensure the user is logged in
     user_id = request.session.get('user_id')
-    if not user_id:
-        return redirect('login')  # Redirect to login if user is not authenticated
+    if 'user_id' not in request.session:
+        request.session['next_url'] = request.path  # Redirect to login if user is not authenticated
+        messages.error(request, 'Please log in to view your profile.')  # Add message for unauthenticated users
+        return redirect('login')  # Redirect to login if not logged in
 
     try:
         # Fetch the user details
@@ -113,11 +189,13 @@ def viewprofile(request):
         }
         return render(request, 'viewprofile.html', context)
     except RegisterDb.DoesNotExist:
+        messages.error(request, 'User not found. Please log in again.')  # Add message for user not found
         return redirect('login')
 
 def editprofile(request):
-    # Check if the user is logged in
     if 'user_id' not in request.session:
+        request.session['next_url'] = request.path  # Redirect to login if not logged in
+        messages.error(request, 'Please log in to edit your profile.')  # Add message for unauthenticated users
         return redirect('login')  # Redirect to login if not logged in
 
     user_id = request.session['user_id']  # Get logged-in user ID
@@ -132,17 +210,18 @@ def editprofile(request):
         confirm_password = request.POST.get('confirm_password')
 
         if password and password != confirm_password:
-            return render(request, 'editprofile.html', {'user': user, 'error': 'Passwords do not match!'})
+            messages.error(request, 'Passwords do not match!')  # Show error message if passwords don't match
+            return render(request, 'editprofile.html', {'user': user})
 
-        # Update user details
         user.Name = name
         user.Email = email
         user.Location = location
         user.Phone = phone
         if password:
-            user.Password = make_password(password)  # Hash new password
+            user.Password = make_password(password)  # Hash new password if provided
 
         user.save()
+        messages.success(request, 'Profile updated successfully!')  # Success message after update
         return redirect('viewprofile')  # Redirect to profile page after update
 
     return render(request, 'editprofile.html', {'user': user})
@@ -155,14 +234,22 @@ def login_view(request):
             user = RegisterDb.objects.get(Email=email)  # Retrieve user from custom model
             if check_password(password, user.Password):  # Check if the password matches the hashed password
                 request.session['user_id'] = user.UserID  # Example of setting a session for the logged-in user
-                return render(request, 'home.html', {'greet': 'Welcome back!{}'.format(user.Name)})
+
+                # Check if 'next_url' is set in session, else redirect to home
+                next_url = request.session.get('next_url', '/')
+                
+                if 'next_url' in request.session:
+                    del request.session['next_url']
+                
+                return redirect(next_url)
+
             else:
-                return render(request, 'login.html', {'error': 'Invalid email or password'})
+                messages.error(request, 'Invalid email or password')  # Error message for invalid password
         except RegisterDb.DoesNotExist:
-            return render(request, 'login.html', {'error': 'Invalid email or password'})
+            messages.error(request, 'Invalid email or password')  # Error message if email is not found
+
+    # After any failed login attempt, re-render the login page
     return render(request, 'login.html')
-
-
 
 def signup_view(request):
     if request.method == 'POST':
@@ -171,42 +258,53 @@ def signup_view(request):
         password = request.POST.get('password1')
         confirm_password = request.POST.get('password2')
 
+        # Check if all fields are filled
         if not name or not email or not password or not confirm_password:
-            return render(request, 'signup.html', {'error': 'Please fill in all fields'})
+            messages.error(request, 'Please fill in all fields')
+            return render(request, 'signup.html')
 
+        # Validate password strength
         password_pattern = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
         if not password_pattern.match(password):
-            return render(request, 'signup.html', {'error': 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character'})
+            messages.error(request, 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character')
+            return render(request, 'signup.html')
 
+        # Check if passwords match
         if password != confirm_password:
-            return render(request, 'signup.html', {'error': 'Passwords do not match'})
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'signup.html')
 
+        # Check if email already exists
         try:
-            # Check if email already exists in RegisterDb model
             if RegisterDb.objects.filter(Email=email).exists():
-                return render(request, 'signup.html', {'error': 'You already have an account! Please log in.'})
+                messages.error(request, 'You already have an account! Please log in.')
+                return render(request, 'signup.html')
 
-            # Hash the password
+            # Hash the password and save the user to the database
             hashed_password = make_password(password)
-
-            # Save to custom RegisterDb model
             register_db = RegisterDb(Name=name, Email=email, Password=hashed_password, ConfirmPassword=hashed_password)
             register_db.save()
 
-            return redirect('signup_success')  # Redirect to a success page
+            # Set success message and redirect to the login page
+            messages.success(request, 'Registration successful! Please log in to continue.')
+            return redirect('login')  # This should properly redirect to the login page
+
         except IntegrityError:
-            return render(request, 'signup.html', {'error': 'You already have an account! Please log in.'})
+            messages.error(request, 'Email already exists. Please log in.')
+            return render(request, 'signup.html')
         except Exception as e:
-            return render(request, 'signup.html', {'error': f'Registration failed: {str(e)}'})
+            messages.error(request, f'Registration failed: {str(e)}')
+            return render(request, 'signup.html')
+    
     return render(request, 'signup.html')
-
-def signup_success(request):
-    return render(request, 'login.html', {'message': 'Registration successful! Please log in to continue.'})
-
 
 def logout_view(request):
     try:
         del request.session['user_id']
     except KeyError:
         pass
-    return render(request, 'login.html', {'message': 'Logged out successfully!'})
+    messages.success(request, 'Logged out successfully!')
+
+    return redirect('login') 
+
+

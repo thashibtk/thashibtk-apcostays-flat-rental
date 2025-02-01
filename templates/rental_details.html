@@ -5,6 +5,9 @@
 
 {% block extrahead %}
     <link rel="stylesheet" href="{% static 'css/details.css' %}">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script> 
 {% endblock %}
 
 {% block content %}
@@ -48,7 +51,7 @@
             <p class="flat-discription">{{ rental.description }}</p>
             <h3 class="sdeposit mb-3">Security Deposit: ₹ {{ rental.deposit }} </h3>
         </div>
-
+        {% if rental.owner.UserID != request.session.user_id %}
         <div class="dropdown">
             <a class="login-button d-inline-block mt-3 mt-lg-0 log dropdown-toggle" href="#" role="button" id="contactDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 Contact
@@ -60,14 +63,73 @@
                 <li><a class="dropdown-item" href="mailto:{{ rental.email }}">{{ rental.email }}</a></li>
             </ul>
         </div>
+        {% endif %}
+    </div>
+    
+    <div class="d-flex justify-content-end mt-2">
+        <a href="{% url 'editrental' rental.id %}" class="btn btn-primary btn-sm">Edit</a>
+        <a href="#" class="btn btn-danger btn-sm delete-btn" 
+            data-id="{{ rental.id }}" 
+            data-title="{{ rental.title }}" 
+            data-bs-toggle="modal" 
+            data-bs-target="#deleteModal">
+            Delete
+        </a>
+
     </div>
 </div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the rental property "<span id="rentalTitle"></span>"? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <!-- Form for deletion -->
+                <form method="POST" id="deleteForm" action="{% url 'deleterental' rental.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     function changeImage(smallImg) {
         let mainImage = document.getElementById("mainImage");
         mainImage.src = smallImg.src;
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        const deleteForm = document.getElementById('deleteForm');
+        const rentalTitleElement = document.getElementById('rentalTitle');
+        
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const rentalId = btn.getAttribute('data-id');
+                const rentalTitle = btn.getAttribute('data-title');
+                
+                // Update modal with rental title
+                rentalTitleElement.textContent = rentalTitle;
+                
+                // Dynamically set the form action URL to the correct delete URL
+                const deleteUrl = "{% url 'deleterental' 0 %}".replace('0', rentalId);
+                deleteForm.action = deleteUrl;
+            });
+        });
+    });
 </script>
 
 {% endblock %}

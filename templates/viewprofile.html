@@ -14,6 +14,15 @@
         </div>
 
         <div class="form-container">
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="field profile-img">
                 <label for="profile-image" class="form-label"></label>
                 <svg width="100px" height="100px" viewBox="0 0 967 960" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +52,7 @@
                         <input type="tel" id="phone" value="{{ phone }}" disabled>
                     </div>
                     <div class="container button-container">
-                        <a href="{% url 'editprofile' %}" class="savebutton" id="editButton">Edit Profile</a>
+                        <button type="button" class="savebutton" id="editButton" onclick="window.location.href='{% url 'editprofile' %}'">Edit Profile</button>
                     </div>                        
                     </div>
                 </form>

@@ -10,6 +10,14 @@
 {% block content %}
 <div class="container">
     <div class="container mt-5 ms-3">
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
         <h3 class="browse">Your Rentals</h3>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for rental in rentals %}
@@ -32,6 +40,17 @@
                             <h3 class="flat-amount">₹ {{ rental.rent }} <span class="permonth">/ month</span></h3>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-end mt-2">
+                        <a href="{% url 'editrental' rental.id %}" class="btn btn-primary btn-sm">Edit</a>
+                        <!-- Added Data Attributes to Delete Button -->
+                        <a href="#" class="btn btn-danger btn-sm delete-btn" 
+                           data-id="{{ rental.id }}" 
+                           data-title="{{ rental.title }}" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#deleteModal">
+                           Delete
+                        </a>
+                    </div>
                 </div>
             </div>
             {% empty %}
@@ -40,4 +59,53 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the rental property "<span id="rentalTitle">Title</span>"? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <!-- Form Action will be updated dynamically -->
+                <form method="POST" id="deleteForm" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        const deleteForm = document.getElementById('deleteForm');
+        const rentalTitleElement = document.getElementById('rentalTitle');
+        
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const rentalId = btn.getAttribute('data-id');
+                const rentalTitle = btn.getAttribute('data-title');
+                
+                // Update modal with rental title
+                rentalTitleElement.textContent = rentalTitle;
+                
+                // Dynamically set the form action URL to the correct delete URL
+                const deleteUrl = "{% url 'deleterental' 0 %}".replace('0', rentalId);
+                deleteForm.action = deleteUrl;
+            });
+        });
+    });
+</script>
+
+
