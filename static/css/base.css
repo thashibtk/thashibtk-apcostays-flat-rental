@@ -250,3 +250,18 @@ body{
     margin-bottom: 30px;
 }
 
+.navsearch {
+    background-color: #ffffff;
+    border: none;
+    outline: none;
+}
+
+
+
+.proptype{
+    color: #9D9D9D;
+    font-size: x-small;
+    font-family: 'Varela Round';
+
+}
+

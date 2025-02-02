@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if rentals %}
+        Search Result - Apcostays
+    {% else %}
+        No Search Results - Apcostays
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/browseall.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="container mt-5 ms-3">
+            {% if rentals %}
+                <h3 class="browse">Showing result for "{{ query }}"</h3>
+            {% else %}
+                <h3 class="browse">No results found for "{{ query }}"</h3>
+            {% endif %}
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for rental in rentals %}
+                    <div class="col mb-5">
+                        <div class="flat" style="cursor:pointer;" onclick="window.location.href='{% url 'rental_details' rental.id %}'">
+                            <img class="flat-img" src="{% if rental.images.all %}{{ rental.images.first.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="{{ rental.title }}">
+                            <div class="flat-tag">
+                                <h3 class="flat-title">{{ rental.title }} <span class="proptype">{{ rental.property_type }}</span></h3>
+                                <h2 class="flat-loc">
+                                    <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
+                                        <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
+                                    </svg>
+                                    {{ rental.location }}
+                                </h2>
+                                <div class="horiline3"></div>
+                                <div class="flat-price">
+                                    <h3 class="flat-amount">₹ {{ rental.rent }} <span class="permonth">/ month</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

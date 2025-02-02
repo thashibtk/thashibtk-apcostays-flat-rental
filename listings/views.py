@@ -1,10 +1,13 @@
+import os
 import re
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
-from .models import RegisterDb, RentalImage
+from .models import Rental, RegisterDb, RentalImage
+from django.core.files.storage import default_storage
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Rental
 from django.contrib import messages
+
 
 # Create your views here.
 
@@ -25,10 +28,29 @@ def browseall(request):
     rentals = Rental.objects.all().order_by('-id')  # Get all rentals, ordered by newest first
     return render(request, 'browseall.html', {'rentals': rentals})
 
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Rental
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Rental, RegisterDb, RentalImage
+def search_rentals(request):
+    query = request.GET.get('q', '')
+
+    # Build the search query dynamically based on user input
+    rental_filters = Q()
+
+    if query:
+        # Search across multiple fields using the `icontains` lookup
+        rental_filters |= Q(title__icontains=query)
+        rental_filters |= Q(description__icontains=query)
+        rental_filters |= Q(location__icontains=query)
+        rental_filters |= Q(property_type__icontains=query)
+        rental_filters |= Q(rooms__icontains=query)
+
+    # Get the rentals that match the filters
+    rentals = Rental.objects.filter(rental_filters)
+
+    return render(request, 'searchres.html', {'rentals': rentals, 'query': query})
+
 
 def list_rental(request):
     # Check if user is logged in via session
@@ -159,15 +181,47 @@ def edit_rental(request, rental_id):
 
 
 def delete_rental(request, rental_id):
+
+    print(f"Deleting rental ID: {rental_id}")
+
     rental = get_object_or_404(Rental, id=rental_id)
     
     if rental.owner.UserID != request.session.get('user_id'):
         return render(request, 'error.html', {'message': 'You are not authorized to delete this rental.'})
+    
+    for image in rental.images.all():
+        image_path = image.image.path
+        if os.path.exists(image_path):
+            os.remove(image_path)
+        image.delete()
+    
+    print(f"Session User ID: {request.session.get('user_id')}")
+    print(f"Rental Owner ID: {rental.owner.UserID}")
 
     rental.delete()
+    print(f"Rental {rental_id} deleted successfully.")
+
     messages.success(request, 'The rental has been deleted successfully.')
 
     return redirect('userrentals')
+
+def delete_image(request, image_id):
+    # Get the image object (assuming you have a model for images linked to rental)
+    image = get_object_or_404(RentalImage, id=image_id)
+    
+    # Get the image file path
+    image_path = image.file.path
+    
+    # Delete the image from the database
+    image.delete()
+
+    # Check if file exists and then delete it from the filesystem
+    if os.path.exists(image_path):
+        os.remove(image_path)
+
+    messages.success(request, 'Image deleted successfully.')
+    
+    return redirect('rental_details', rental_id=image.rental.id)
 
 
 def viewprofile(request):

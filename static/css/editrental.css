@@ -278,7 +278,7 @@
     transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
   }
   
-    form{
+    .formc{
       display: ruby;
     }
   
@@ -295,13 +295,13 @@
     }
     
     
-    .form-inner form .field{
+    .form-inner .formc .field{
       height: 50px;
       width: 100%;
       margin-top: 20px;
     }
   
-    .form-inner form .field textarea{
+    .form-inner .formc .field textarea{
       height: 150px !important;
     }
     
@@ -346,7 +346,7 @@
   }
     
     
-    form .btn{
+  .formc .btn{
       height: 100%;
       width: 100%;
       border-radius: 15px;
@@ -354,7 +354,7 @@
       overflow: hidden;
     }
     
-    form .btn .btn-layer{
+    .formc .btn .btn-layer{
       height: 100%;
       width: 300%;
       position: absolute;
@@ -363,11 +363,11 @@
       transition: all 0.4s ease;;
     }
     
-    form .btn:hover .btn-layer{
+    .formc .btn:hover .btn-layer{
       left: 0;
     }
     
-    form .btn input[type="submit"]{
+    .formc .btn input[type="submit"]{
       height: 100%;
       width: 100%;
       z-index: 1;

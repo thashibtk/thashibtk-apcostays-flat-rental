@@ -15,7 +15,7 @@
         </div>
         <div class="form-container">
             <div class="form-inner">
-                <form method="POST" enctype="multipart/form-data" action="{% url 'listrental' %}">
+                <form class="formc" method="POST" enctype="multipart/form-data" action="{% url 'listrental' %}">
                     {% csrf_token %}
                     
                     <!-- Property Details -->
@@ -53,7 +53,7 @@
                     </div>
                     <div class="field">
                         <label for="description" class="form-label">Property Description</label>
-                        <textarea id="description" name="description" rows="5"></textarea>
+                        <textarea id="description" name="description" rows="5">This property offers a spacious and well-maintained living space, combining modern design with comfort. Located in a prime neighborhood, it provides easy access to essential amenities such as shops, restaurants, and public transport. Ideal for individuals or families, this rental offers a peaceful yet convenient living experience, perfect for anyone looking for a comfortable home.</textarea>
                     </div>
                 
                     <!-- Image Upload -->
@@ -174,6 +174,28 @@
             document.getElementById('imagePreviews').style.display = 'none';
         }
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const descriptionField = document.getElementById('description');
+        const defaultDescription = descriptionField.value.trim(); // Store the default description
+
+        descriptionField.addEventListener('focus', clearDescription);
+        
+        function clearDescription() {
+            // If the field still has the default description, clear it
+            if (descriptionField.value === defaultDescription) {
+                descriptionField.value = '';
+            }
+        }
+
+        // Optional: Restore the default description if the user leaves the field empty
+        descriptionField.addEventListener('blur', function() {
+            if (descriptionField.value.trim() === '') {
+                descriptionField.value = defaultDescription;
+            }
+        });
+    });
 </script>
 
 {% endblock %}

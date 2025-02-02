@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="container">
         <div class="container mt-5 ms-3">
             <h3 class="browse">Discover Listings</h3>
@@ -17,7 +18,7 @@
                     <div class="flat" style="cursor:pointer;" onclick="window.location.href='{% url 'rental_details' rental.id %}'">
                         <img class="flat-img" src="{% if rental.images.all %}{{ rental.images.first.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="{{ rental.title }}">
                         <div class="flat-tag">
-                            <h3 class="flat-title">{{ rental.title }}</h3>
+                            <h3 class="flat-title">{{ rental.title }} <span class="proptype">{{ rental.property_type }}</span></h3>
                             <h2 class="flat-loc">
                                 <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
                                     <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>

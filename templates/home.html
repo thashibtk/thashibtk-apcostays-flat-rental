@@ -8,25 +8,30 @@
 
 {% block content %}
 
-    <div class="container herodiv">
+    <div class="container herodiv d-flex flex-column flex-lg-row align-items-center">
         <!-- Text Section -->
-        <div class="text-section">
+        <div class="text-section text-center text-lg-start mb-4 mb-lg-0">
             {% if greet %}
-                <div class="greet" >{{ greet }}</div>
+                <div class="greet mb-3">{{ greet }}</div>
             {% endif %}
-          <h1>Find The Ideal<span class="highlight"> Housing</span></h1>
-          <p>Search for premium rental apartments and villas near you!</p>
-          <div class="search-container">
-            <input type="text" placeholder="Find Listings">
-            <svg width="42" class="icon" height="28" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M36.3799 36.38L44.9399 44.94" stroke="#0A35F4" stroke-width="3.21" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M6.41992 23.54C6.41992 32.9952 14.0848 40.66 23.5399 40.66C28.2757 40.66 32.5623 38.7372 35.6617 35.6296C38.7503 32.5328 40.6599 28.2594 40.6599 23.54C40.6599 14.0849 32.995 6.42004 23.5399 6.42004C14.0848 6.42004 6.41992 14.0849 6.41992 23.54Z" stroke="#0A35F4" stroke-width="3.21" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <h1><span class="highlight">Find</span> <span class="glow">The Ideal</span><span class="highlight"> Housing</span></h1>
+            <p>Search for premium rental apartments and villas near you!</p>
+            <div class="search-container mt-3">
+                <form method="GET" action="{% url 'rental_search' %}">
+                    <input type="text" name="q" placeholder="Search by location, type, or rooms" value="{{ query }}">
+                    <button type="submit">
+                        <svg width="42" class="icon" height="28" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M36.3799 36.38L44.9399 44.94" stroke="#0A35F4" stroke-width="3.21" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6.41992 23.54C6.41992 32.9952 14.0848 40.66 23.5399 40.66C28.2757 40.66 32.5623 38.7372 35.6617 35.6296C38.7503 32.5328 40.6599 28.2594 40.6599 23.54C40.6599 14.0849 32.995 6.42004 23.5399 6.42004C14.0848 6.42004 6.41992 14.0849 6.41992 23.54Z" stroke="#0A35F4" stroke-width="3.21" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
         </div>
-        </div>
+
         <!-- Image Section -->
-        <div class="image-section">
-          <img id = "hero-image" src="{% static 'images/hero-image.jpg' %}" alt="Building">
+        <div class="image-section text-center">
+          <img id="hero-image" src="{% static 'images/hero-image.jpg' %}" alt="Building" class="img-fluid">
         </div>
     </div>
 
@@ -50,7 +55,7 @@
                     <img class="flat-img" src="{% static 'images/flat.png' %}" alt="No Image Available">
                 {% endif %}
                 <div class="flat-tag">
-                    <h3 class="flat-title">{{ rental.title }}</h3>
+                    <h3 class="flat-title">{{ rental.title }} <span class="proptype">{{ rental.property_type }}</span></h3>
                     <h2 class="flat-loc">
                         <svg width="10" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.74333 13.874C5.14733 14.2073 5.56867 14.512 6 14.8093C6.43226 14.5159 6.85155 14.2039 7.25667 13.874C7.932 13.3195 8.56756 12.7182 9.15867 12.0747C10.5213 10.5847 12 8.42467 12 6C12 5.21207 11.8448 4.43185 11.5433 3.7039C11.2417 2.97595 10.7998 2.31451 10.2426 1.75736C9.68549 1.20021 9.02405 0.758251 8.2961 0.456723C7.56815 0.155195 6.78793 0 6 0C5.21207 0 4.43185 0.155195 3.7039 0.456723C2.97595 0.758251 2.31451 1.20021 1.75736 1.75736C1.20021 2.31451 0.758251 2.97595 0.456723 3.7039C0.155195 4.43185 -1.17411e-08 5.21207 0 6C0 8.42467 1.47867 10.584 2.84133 12.0747C3.43241 12.7185 4.06798 13.3193 4.74333 13.874ZM6 8.16667C5.42536 8.16667 4.87426 7.93839 4.46794 7.53206C4.06161 7.12574 3.83333 6.57464 3.83333 6C3.83333 5.42536 4.06161 4.87426 4.46794 4.46794C4.87426 4.06161 5.42536 3.83333 6 3.83333C6.57464 3.83333 7.12574 4.06161 7.53206 4.46794C7.93839 4.87426 8.16667 5.42536 8.16667 6C8.16667 6.57464 7.93839 7.12574 7.53206 7.53206C7.12574 7.93839 6.57464 8.16667 6 8.16667Z" fill="#1940F4"/>

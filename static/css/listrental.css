@@ -23,7 +23,7 @@
   transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
 }
 
-  form{
+  .formc{
     display: ruby;
   }
 
@@ -40,19 +40,19 @@
   }
   
   
-  .form-inner form .field{
+  .form-inner .formc .field{
     height: 50px;
     width: 100%;
     margin-top: 20px;
   }
 
-  .form-inner form .field textarea{
+  .form-inner .formc .field textarea{
     height: 150px !important;
   }
   
-.form-inner form .field input,
-.form-inner form .field textarea,
-.form-inner form .field select{
+.form-inner .formc .field input,
+.form-inner .formc .field textarea,
+.form-inner .formc .field select{
     height: 100%;
     width: 100%;
     outline: none;
@@ -64,24 +64,24 @@
     transition: all 0.3s ease;
   }
   
-  .form-inner form .field input:focus,
-  .form-inner form .field textarea:focus,
-  .form-inner form .field select:focus{
+  .form-inner .formc .field input:focus,
+  .form-inner .formc .field textarea:focus,
+  .form-inner .formc .field select:focus{
     border-color: #1a75ff;
     box-shadow: inset 0 0 3px #5268cb;
   }
-  .form-inner form .field input::placeholder,
-.form-inner form .field textarea::placeholder{
+  .form-inner .formc .field input::placeholder,
+.form-inner .formc .field textarea::placeholder{
     color: #999;
     transition: all 0.3s ease;
   }
-  form .field input:focus::placeholder,
-  form .field textarea:focus::placeholder,
-  form .field select:focus::placeholder{
+  .formc .field input:focus::placeholder,
+  .formc .field textarea:focus::placeholder,
+  .formc .field select:focus::placeholder{
     color: #1a75ff;
   }
   
-  .form-inner form .signup-link{
+  .form-inner .formc .signup-link{
     text-align: center;
     margin-top: 30px;
   }
@@ -91,7 +91,7 @@
 }
   
   
-  form .btn{
+.formc .btn{
     height: 100%;
     width: 100%;
     border-radius: 15px;
@@ -99,7 +99,7 @@
     overflow: hidden;
   }
   
-  form .btn .btn-layer{
+  .formc .btn .btn-layer{
     height: 100%;
     width: 300%;
     position: absolute;
@@ -108,11 +108,11 @@
     transition: all 0.4s ease;;
   }
   
-  form .btn:hover .btn-layer{
+  .formc .btn:hover .btn-layer{
     left: 0;
   }
   
-  form .btn input[type="submit"]{
+  .formc .btn input[type="submit"]{
     height: 100%;
     width: 100%;
     z-index: 1;
