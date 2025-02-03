@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class RegisterDb(models.Model):
     UserID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=100, null=True, blank=True)
@@ -20,6 +21,7 @@ class Rental(models.Model):
     rent = models.DecimalField(max_digits=10, decimal_places=2)
     deposit = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)
+    verified = models.BooleanField(default=False)
 
     # Add ForeignKey relationship
     owner = models.ForeignKey(RegisterDb, on_delete=models.CASCADE)

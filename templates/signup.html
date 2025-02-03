@@ -24,7 +24,7 @@
                 </div>
             {% endif %}
             <div class="form-inner">
-                <form action="{% url 'signup' %}" method="post" class="signup">
+                <form class=".formc" action="{% url 'signup' %}" method="post" class="signup">
                     {% csrf_token %}
                 
                     <div class="field">
@@ -39,8 +39,7 @@
                     <div class="field">
                         <input type="password" name="password2" placeholder="Confirm password" required>
                     </div>
-                    <div class="field btn">
-                        <div class="btn-layer"></div>
+                    <div class="field subbtn">
                         <input type="submit" value="Signup">
                     </div>
                     <div class="signup-link">Already a member? <a href="{% url 'login' %}">Login now</a></div>

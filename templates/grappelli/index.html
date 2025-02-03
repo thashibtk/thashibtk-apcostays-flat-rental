@@ -1,0 +1,15 @@
+{% extends "grappelli/base_site.html" %}
+
+{% block title %}Apcostays Admin{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/admin_custom.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="my-custom-admin">
+        <!-- Custom HTML content for your admin interface -->
+        <h2>Welcome to Apcostays Admin</h2>
+    </div>
+    {{ block.super }}
+{% endblock %}

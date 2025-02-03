@@ -10,8 +10,14 @@
 {% block content %}
 <div class="container flat-container">
     <div class="flat-head">
-        <div class="flat-title">{{ rental.title }}</div>
-        <h2 class="flat-loc">{{ rental.location }}</h2>
+        <div class="flat-title">{{ rental.title }}
+            <!-- Show "Unverified" badge if not verified -->
+            {% if not rental.verified %}
+            <span class="badge unveri bg-warning text-dark">Unverified &#x24D8;</span>
+        {% endif %}
+        </div>
+        <h2 class="flat-loc">{{ rental.location }} </h2>
+        
     </div>
 
     <div class="image-gallery">

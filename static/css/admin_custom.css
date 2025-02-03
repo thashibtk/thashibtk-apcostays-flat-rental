@@ -1,0 +1,40 @@
+/* Change the background color of the header */
+body {
+    background-color: #f0f0f0;
+}
+
+#header {
+    background-color: #0A35F4;
+    color: white;
+}
+
+/* Style the navigation links */
+.navbar-nav li a {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Customize the body background of the admin interface */
+body {
+    background-color: #f9f9f9;
+}
+
+/* Change the background color of the sidebar */
+#grappelli-menu {
+    background-color: #3a4034;
+}
+
+/* Change the color of menu items */
+#grappelli-menu a {
+    color: #fff;
+}
+
+/* Style for the admin header */
+.navbar-brand {
+    color: #007bff;
+}
+
+/* Customizing the form fields */
+.module .form-row {
+    background-color: #f8f9fa;
+}

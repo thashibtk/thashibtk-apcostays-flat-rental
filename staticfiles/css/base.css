@@ -1,0 +1,267 @@
+body{
+    background: radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(181,201,231,1) 100%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+
+.alert-container {
+    margin-top: 20px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.alert-success {
+    background-color: #d4edda;  /* Light green background */
+    color: #155724;  /* Dark green text */
+    border: 1px solid #c3e6cb;  /* Green border */
+}
+
+.alert-error {
+    background-color: #f8d7da;  /* Light red background */
+    color: #721c24;  /* Dark red text */
+    border: 1px solid #f5c6cb;  /* Red border */
+}
+
+
+.container-fluid {
+    width: 1200px;
+}
+
+.navbar{
+    margin-top: 15px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-weight: bolder;
+}
+.navbar-brand img {
+    max-width: 40px;
+    margin-right: 10px;
+}
+.collapse{
+    font-weight: bolder;
+    color: #000000;
+    font-size: 15px;
+}
+@media (max-width: 768px) {
+    .log{
+        justify-content: space-between;
+        width: 200px;
+
+    }
+}
+.nav-item{
+    margin-right: 30px;
+}
+.login-button {
+    color: #000000;
+    text-decoration: none;
+    border: 1px solid #000000;
+    border-radius: 20px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+.login-button:hover {
+    background-color: #0a35f458;
+}
+
+
+.logsincontainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.dropdown-menu {
+    min-width: 150px;
+}
+
+.dropdown-item {
+    font-size: 16px;
+}
+.dropdown-menu {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+.alert {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1
+
+}
+
+
+
+/* #footer */
+.horiline{
+    width: 100%;
+    height: 1.67px;
+    background-color: #0A35F4;
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+
+@media (max-width: 768px) {
+    .horiline {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .footer-logo{
+        width: 75px;
+
+    }
+}
+
+
+.upfooter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.col-left, .col-right {
+    flex: 1;
+    margin: 10px;
+}
+.col-left {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.col-right {
+    margin-right: 150px;
+    text-align: right;
+}
+.col-right ul {
+    padding-left: 0;
+}
+.col-right ul li {
+    list-style-type: none;
+}
+.col-right .social-media {
+    display: flex;
+    justify-content: center;
+}
+.col-right .social-media a {
+    margin: 0 5px;
+}
+@media (max-width: 768px) {
+    .upfooter {
+        display: contents;
+    }
+    .col-left, .col-right {
+        text-align: center;
+    }
+    .col-right {
+        margin: 100px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .col-right .social-media {
+        justify-content: center;
+    }
+}
+
+.followus{
+    margin-left: 75px;
+    margin-top: 20px;
+}
+@media (max-width: 768px) {
+    .followus {
+        margin-left: 0;
+    }
+}
+
+
+.text-muted{
+    text-align: end;
+}
+
+
+@media (max-width: 768px) {
+    .upfooter {
+        display: contents;
+    }
+    .col-left {
+        text-align: center;
+    }
+    .col-left img {
+        width: 100px;
+        height: 130px;
+    }
+    .col-left h4 {
+        font-size: 20px !important;
+    }
+    .col-left img {
+        width: 50px;
+        height: auto;
+    }
+    .col-right {
+        font-size: 10px;
+    }
+    .footlink{
+        font-size: 10px;
+    }
+}
+
+
+.horiline2{
+    width: 100%;
+    height: 1.67px;
+    background-color: #9797978b;
+    margin-top: 80px;
+    margin-bottom: 40px;
+  }
+
+@media (max-width: 768px) {
+    .horiline2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.downfooter{
+    margin-bottom: 30px;
+}
+
+.navsearch {
+    background-color: #ffffff;
+    border: none;
+    outline: none;
+}
+
+
+
+.proptype{
+    color: #9D9D9D;
+    font-size: x-small;
+    font-family: 'Varela Round';
+
+}
+

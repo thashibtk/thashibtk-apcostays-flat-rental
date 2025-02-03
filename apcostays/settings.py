@@ -30,8 +30,18 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+GRAPPELLI_ADMIN_TITLE = "Apcostays Admin Panel"
+
+# Add custom CSS file
+GRAPPELLI_MEDIA = {
+    'css': {
+        'all': ('css/admin_custom.css',),
+    },
+}
+
 
 INSTALLED_APPS = [
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,6 +145,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 import os
 

@@ -96,7 +96,7 @@ def list_rental(request):
             RentalImage.objects.create(rental=rental, image=image)
 
         # Add success message
-        messages.success(request, 'Rental listing submitted successfully.')
+        messages.success(request, 'Rental listing submitted successfully. Please wait for verification.')
 
         # Redirect to user rentals page after successful listing
         return redirect('userrentals')  # You can change this to your specific URL name for user rentals
@@ -104,37 +104,58 @@ def list_rental(request):
     return render(request, 'listrental.html', {'owner_name': owner_name, 'email': email, 'phone': phone})
 
 
-
 def rental_details(request, rental_id):
-    # Check if the user is logged in via session
+    """Display rental details only if verified or owned by the user."""
+
+    # Check if the user is logged in
     if 'user_id' not in request.session:
         request.session['next_url'] = request.path
-        messages.info(request, 'Please log in to view the rental details.')  # Add a message
-        return render(request, 'login.html')
+        messages.info(request, 'Please log in to view the rental details.')  # Flash message
+        return redirect('login')  # Redirect to login page
 
     # Get the rental property by ID
     rental = get_object_or_404(Rental, id=rental_id)
 
-    # Get all images related to this rental (assuming you have a related name 'images')
+    # Get all images related to this rental
     images = rental.images.all()
 
-    # Check if the logged-in user is the owner of the rental property
-    is_owner = rental.owner.UserID == request.session.get('user_id')
+    # Get logged-in user
+    user_id = request.session.get('user_id')
+    
+    # Check if the logged-in user is the owner
+    is_owner = rental.owner.UserID == user_id
 
-    # Pass the rental, images, and ownership status to the template
+    # Only allow viewing if rental is verified or user is the owner
+    if not rental.verified and not is_owner:
+        messages.warning(request, "This rental is pending verification.")
+        return redirect('userrentals')
+
+    # Pass rental data to the template
     return render(request, 'rental_details.html', {
         'rental': rental,
         'images': images,
         'is_owner': is_owner
     })
 
+
 def userrentals(request):
+    """Show all rentals of the logged-in user."""
+    
+    # Check if the user is logged in
     if 'user_id' not in request.session:
         request.session['next_url'] = request.path
+        messages.info(request, 'Please log in to view your rentals.')  # Flash message
+        return redirect('login')
 
-    # Retrieve the logged-in user's rentals
-    user = RegisterDb.objects.get(UserID=request.session['user_id'])  # Assuming RegisterDb stores the user info
-    rentals = Rental.objects.filter(owner=user)  # Use foreign key to filter rentals by user
+    # Retrieve the logged-in user
+    try:
+        user = RegisterDb.objects.get(UserID=request.session['user_id'])
+    except RegisterDb.DoesNotExist:
+        messages.error(request, "User not found. Please log in again.")
+        return redirect('login')
+
+    # Fetch rentals owned by the user
+    rentals = Rental.objects.filter(owner=user)
 
     return render(request, 'user_rentals.html', {'rentals': rentals})
 

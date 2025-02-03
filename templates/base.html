@@ -20,10 +20,9 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <!-- Brand Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-2" style="height: 30px;"> Apcostays
+                <a class="navbar-brand d-flex align-items-center" style="height: 30px; transition: transform 0.3s ease-in-out;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-2" > Apcostays
                 </a>
-        
                 <!-- Toggle Button for Small Screens -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

@@ -21,19 +21,29 @@
         <h3 class="browse">Your Rentals</h3>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for rental in rentals %}
-            <!-- Rental Card -->
             <div class="col mb-5">
                 <div class="flat" style="cursor:pointer;" onclick="window.location.href='{% url 'rental_details' rental.id %}'">
-                    <!-- Display the first image or a default image if no image is available -->
+                    
+                    <!-- Display the first image or a default image -->
                     <img class="flat-img" src="{% if rental.images.first %}/media/{{ rental.images.first.image.name }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="Rental Image">
+
                     <div class="flat-tag">
-                        <h3 class="flat-title">{{ rental.title }} <span class="proptype">{{ rental.property_type }}</span></h3>
+                        <h3 class="flat-title">
+                            {{ rental.title }} <span class="proptype">{{ rental.property_type }}</span>
+                        </h3>
+
+                        <!-- Show "Unverified" badge if not verified -->
+                        {% if not rental.verified %}
+                            <span class="badge unveri bg-warning text-dark">Unverified</span>
+                        {% endif %}
+
                         <h2 class="flat-loc">
                             <svg width="10" height="15" viewBox="0 0 12 15" fill="none">
                                 <path d="M6 14.8C8.5 12.7 12 8.4 12 6C12 2.7 9.3 0 6 0C2.7 0 0 2.7 0 6C0 8.4 3.5 12.7 6 14.8Z" fill="blue"/>
                             </svg>
                             {{ rental.location }}
                         </h2>
+
                         <div class="horiline3"></div>
                         <div class="flat-price">
                             <h3 class="flat-amount">₹ {{ rental.rent }} <span class="permonth">/ month</span></h3>
@@ -60,6 +70,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

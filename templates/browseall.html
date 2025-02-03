@@ -14,6 +14,7 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 
                 {% for rental in rentals %}
+                {% if rental.verified %}
                 <div class="col mb-5">
                     <div class="flat" style="cursor:pointer;" onclick="window.location.href='{% url 'rental_details' rental.id %}'">
                         <img class="flat-img" src="{% if rental.images.all %}{{ rental.images.first.image.url }}{% else %}{% static 'images/flat.png' %}{% endif %}" alt="{{ rental.title }}">
@@ -32,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% empty %}
                 <p>No listings available.</p>
                 {% endfor %}
