@@ -52,6 +52,20 @@ INSTALLED_APPS = [
 ]
 
 
+# Set session timeout in seconds (e.g., 10 minutes = 600 seconds)
+SESSION_COOKIE_AGE = 600  # 10 minutes
+
+# End session when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Use database-backed sessions (if not already set)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# Optional: Set session expiry on inactivity (requires middleware)
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session age on user activity
+
+
+
 LOGIN_URL = '/login/'
 
 MIDDLEWARE = [
